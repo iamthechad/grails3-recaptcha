@@ -59,19 +59,10 @@ class MailhideService {
     def createMailhideURL(emailAddress) {
         def config = getMailhideConfig()
         def paddedEmail = StringUtils.padString(emailAddress)
-        def encryptedEmail = cachedEmail[emailAddress] ?: b64Encode(MailhideEncryption.encrypt(paddedEmail, config.privateKey))
+        def encryptedEmail = cachedEmail[emailAddress] ?: MailhideEncryption.encrypt(paddedEmail, config.privateKey).encodeAsURLSafeBase64()
         if (!cachedEmail[emailAddress]) {
             cachedEmail[emailAddress] = encryptedEmail
         }
         return "http://www.google.com/recaptcha/mailhide/d?k=${config.publicKey}&c=${encryptedEmail}"
-    }
-
-    def urlSafeBase64Encode(target) {
-        if (target == null) {
-            return target
-        }
-
-        String firstPass = target.encodeAsBase64()
-        firstPass.replaceAll("\\+", "-").replaceAll("/", "_")
     }
 }
