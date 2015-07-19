@@ -1,4 +1,4 @@
-package com.megatome.grails.util
+
 
 import org.grails.plugins.codecs.Base64Codec
 import org.junit.Before
