@@ -1,4 +1,4 @@
-package com.megatome.grails.util
+
 
 /**
  * Copyright 2010-2015 Megatome Technologies
