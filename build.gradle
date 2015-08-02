@@ -69,3 +69,22 @@ dependencies {
 task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion
 }
+
+bintray {
+    user = project.hasProperty('bintray_user') ? project.bintray_user : System.getenv('bintray_user')
+    key = project.hasProperty('bintray_key') ? project.bintray_key : System.getenv('bintray_key')
+    publications = ["maven"]
+    publish = true
+    pkg {
+        userOrg = ''
+        repo = "plugins"
+        name = project.name
+        desc = "Grails 3 ReCaptcha and MailHide plugin"
+        websiteUrl = "https://github.com/iamthechad/grails3-recaptcha"
+        issueTrackerUrl = "https://github.com/iamthechad/grails3-recaptcha/issues"
+        vcsUrl = "https://github.com/iamthechad/grails3-recaptcha.git"
+        licenses = ["Apache-2.0"]
+        labels = ["recaptcha", "mailhide"]
+        publicDownloadNumbers = true
+    }
+}
