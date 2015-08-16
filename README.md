@@ -54,7 +54,7 @@ This plugin is designed to make using the ReCaptcha and Mailhide services within
 
 Add the following to your `build.gradle`
 
-    compile "org.grails.plugins:recaptcha:3.0.0RC1"
+    compile "org.grails.plugins:recaptcha:3.0.0"
     
 ## Configuration
 Add the following to your application's `application.yml` file:
