@@ -1,5 +1,17 @@
 # Change Log
 
+## [v3.0.0](https://github.com/iamthechad/grails3-recaptcha/tree/v3.0.0) (2015-08-16)
+
+[Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.0.0RC1...v3.0.0)
+
+**Fixed bugs:**
+
+- Language attribute not working for explicit captcha [\#4](https://github.com/iamthechad/grails3-recaptcha/issues/4)
+
+**Merged pull requests:**
+
+- move codec into package [\#3](https://github.com/iamthechad/grails3-recaptcha/pull/3) ([jeffbrown](https://github.com/jeffbrown))
+
 ## [v3.0.0RC1](https://github.com/iamthechad/grails3-recaptcha/tree/v3.0.0RC1) (2015-08-02)
 
 **Implemented enhancements:**
