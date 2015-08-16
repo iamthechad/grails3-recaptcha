@@ -11,6 +11,8 @@ jdk:
   - oraclejdk7
   - openjdk7
 script: ./gradlew check --info --refresh-dependencies -Dgrails.env=test
+after_success:
+- ./gradlew jacocoRootReport coveralls
 notifications:
   slack:
     secure: m7tLX+4nHW9/GAw7htMJOvDCPu847ETA2NlyTPu4FSEFlR4ZRlSbZHOcrQMmNm/x6BXboO+BpHOUNzQaeLnXvHOTBiJFHTRuUqefZRHlJeuwNMYE4HPbjokL2QujVrOpTnpdp/LHaTysKOpEqWVkIznZTnJRnx+cHRf90sGkUtQ=
