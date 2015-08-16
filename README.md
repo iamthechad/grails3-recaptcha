@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.org/iamthechad/grails3-recaptcha.svg?branch=master)](https://travis-ci.org/iamthechad/grails3-recaptcha)
+[![Coverage Status](https://coveralls.io/repos/iamthechad/grails3-recaptcha/badge.svg?branch=master&service=github)](https://coveralls.io/github/iamthechad/grails3-recaptcha?branch=master)
 [![Stories in Ready](https://badge.waffle.io/iamthechad/grails3-recaptcha.png?label=ready&title=Ready)](http://waffle.io/iamthechad/grails3-recaptcha)
+[![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![Badges](http://img.shields.io/:badges-5/5-ff6799.svg)](https://github.com/badges/badgerbadgerbadger)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -34,9 +37,14 @@
   - [Examples](#examples-1)
     - [mailhide tag](#mailhide-tag)
     - [mailhideURL tag](#mailhideurl-tag)
+- [Contributing](#contributing)
+  - [Before Submission](#before-submission)
+  - [When Submitting](#when-submitting)
 - [Suggestions or Comments](#suggestions-or-comments)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+![Target Branch](https://img.shields.io/badge/target%20branch-version3__1__0-green.svg?style=flat-square)
 
 # Introduction
 
@@ -310,9 +318,25 @@ will create:
 will create:
 
     Created Mailhide URL: http://www.google.com/recaptcha/mailhide/d?k=...publicKey...&c=...encryptedEmail...
+    
+# Contributing
+
+![Target Branch](https://img.shields.io/badge/target%20branch-version3__1__0-green.svg?style=flat-square)
+
+Contributions are welcome, but there a couple of guidelines that will make everything easier.
+
+## Before Submission
+
+* Make sure that all unit tests before submitting a pull request.
+
+## When Submitting
+
+* Be sure to submit pull requests against the current "target branch". This will ensure that changes are applied to the correct version.
+* Make sure that commits have descriptive text that clearly explains the change. (See http://chris.beams.io/posts/git-commit/ for tips on writing good commit messages.)
+* Reference appropriate issues or pull requests if needed. (Use `refs XXX` instead of `fixes XXX` or `closes XXX`)
 
 # Suggestions or Comments
 
-Feel free to submit questions through GitHub or to StackOverflow. (The Grails mailing list appears to be defunct.)
+Feel free to submit questions through GitHub or to StackOverflow.
 
 Alternatively you can contact me directly - cjohnston at megatome dot com
