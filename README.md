@@ -31,12 +31,6 @@
     - [Customizing the Language](#customizing-the-language)
     - [Verify User Input](#verify-user-input)
     - [Testing](#testing)
-- [Usage - Mailhide](#usage---mailhide)
-  - [Edit the Configuration](#edit-the-configuration-1)
-  - [Use the Tag Library](#use-the-tag-library-1)
-  - [Examples](#examples-1)
-    - [mailhide tag](#mailhide-tag)
-    - [mailhideURL tag](#mailhideurl-tag)
 - [Contributing](#contributing)
   - [Before Submission](#before-submission)
   - [When Submitting](#when-submitting)
@@ -292,7 +286,7 @@ Contributions are welcome, but there a couple of guidelines that will make every
 
 ## Before Submission
 
-* Make sure that all unit tests before submitting a pull request.
+* Make sure that all unit tests pass before submitting a pull request.
 
 ## When Submitting
 
