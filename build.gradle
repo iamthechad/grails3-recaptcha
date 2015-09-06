@@ -15,9 +15,10 @@ buildscript {
 plugins {
     id "io.spring.dependency-management" version "0.4.0.RELEASE"
     id "com.jfrog.bintray" version "1.1"
+    id 'net.saliman.cobertura' version '2.2.7'
 }
 
-version "3.0.0"
+version "3.1.0"
 group "org.grails.plugins"
 
 apply plugin: 'maven-publish'
@@ -26,7 +27,6 @@ apply plugin: 'idea'
 apply plugin: "spring-boot"
 apply plugin: "org.grails.grails-plugin"
 apply plugin: "org.grails.grails-gsp"
-apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 // Used for publishing to central repository, remove if not needed
 apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/grailsCentralPublishing.gradle'
@@ -40,6 +40,7 @@ ext {
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+cobertura.coverageFormats = ['html', 'xml']
 
 repositories {
     mavenLocal()
@@ -91,12 +92,5 @@ bintray {
         licenses = ["Apache-2.0"]
         labels = ["recaptcha", "mailhide"]
         publicDownloadNumbers = true
-    }
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
     }
 }
