@@ -2,8 +2,7 @@ package com.megatome.grails.mailhide.security
 
 import com.megatome.grails.mailhide.util.StringUtils
 import org.grails.plugins.codecs.HexCodec
-import org.junit.Before
-import org.junit.Test
+import spock.lang.Specification
 
 /**
  * Copyright 2010-2015 Megatome Technologies
@@ -21,7 +20,7 @@ import org.junit.Test
  * limitations under the License.
  */
 
-class MailhideEncryptionTests extends GroovyTestCase {
+class MailhideEncryptionTest extends Specification {
   // Test data as supplied by Mailhide web site
   static final String PRIVATE_KEY = "deadbeefdeadbeefdeadbeefdeadbeef"
 
@@ -34,9 +33,7 @@ class MailhideEncryptionTests extends GroovyTestCase {
 
   def data = [:]
 
-  @Before
-  void setUp() {
-    super.setUp()
+  def setup() {
     String.metaClass.decodeHex = {
       HexCodec.decode(delegate)
     }
@@ -44,13 +41,20 @@ class MailhideEncryptionTests extends GroovyTestCase {
     data[emailAddress2] = encrypted2
   }
 
-  @Test
-  void testRoundtrip() {
-    MailhideEncryption me = new MailhideEncryption()
-    data.each {k, v->
-      def encoded = me.encrypt(StringUtils.padString(k), PRIVATE_KEY)
-      assert null != encoded
-      assert v == encoded
-    }
+  def "Test that encryption matches the test data supplied for Mailhide" () {
+    setup:
+    def me = new MailhideEncryption(key: PRIVATE_KEY)
+
+    when:
+    def encoded = me.encrypt(StringUtils.padString(emailAddress1))
+
+    then:
+    encoded == encrypted1
+
+    when:
+    encoded = me.encrypt(StringUtils.padString(emailAddress2))
+
+    then:
+    encoded == encrypted2
   }
 }

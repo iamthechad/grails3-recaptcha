@@ -63,7 +63,8 @@ class MailhideService {
     def createMailhideURL(emailAddress) {
         def config = getMailhideConfig()
         def paddedEmail = StringUtils.padString(emailAddress)
-        def encryptedEmail = cachedEmail[emailAddress] ?: MailhideEncryption.encrypt(paddedEmail, config.privateKey).encodeAsURLSafeBase64()
+        def encryptor = new MailhideEncryption(key: config.privateKey)
+        def encryptedEmail = cachedEmail[emailAddress] ?: encryptor.encrypt(paddedEmail).encodeAsURLSafeBase64()
         if (!cachedEmail[emailAddress]) {
             cachedEmail[emailAddress] = encryptedEmail
         }

@@ -21,12 +21,14 @@ import javax.crypto.spec.IvParameterSpec
  */
 
 class MailhideEncryption {
-    static def encrypt(def string, String key) {
-        Cipher cipher = setupCipher(Cipher.ENCRYPT_MODE, key)
+    private String key
+
+    def encrypt(def string) {
+        Cipher cipher = setupCipher(Cipher.ENCRYPT_MODE)
         cipher.doFinal(string.getBytes())
     }
 
-    private static setupCipher(mode, String key) {
+    private setupCipher(mode) {
         def cipher = Cipher.getInstance("AES/CBC/NoPadding")
 
         def keyBytes = key.decodeHex()
