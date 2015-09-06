@@ -20,8 +20,8 @@ class RecaptchaTagLib {
     static namespace = "recaptcha"
     RecaptchaService recaptchaService
     MailhideService mailhideService
-    private def commonAttrNames = ["theme", "lang", "type", "tabindex", "successCallback", "expiredCallback"]
-    private def normalAttrNames = commonAttrNames + "includeScript"
+    private def commonAttrNames = ["theme", "type", "size", "tabindex", "successCallback", "expiredCallback"]
+    private def normalAttrNames = commonAttrNames + "includeScript" + "lang"
     private def explicitAttrNames = ["lang", "loadCallback"]
 
     /**
@@ -46,6 +46,7 @@ class RecaptchaTagLib {
      * Create and display a ReCaptcha instance. Supports the following attributes:
      * <ul>
      * <li>theme - Can be one of 'dark' or 'light'. Defaults to 'light'</li>
+     * <li>size - Can be one of 'compact' or 'normal'. Defaults to 'normal'</li>
      * <li>lang  - Can be one of 'en','nl','fr','de','pt','ru','es','tr'</li>
      * <li>type - Can be one of 'image' or 'audio'. Defaults to 'image'</li>
      * <li>successCallback - Optional function to be called when the user submits a successful response.</li>
@@ -88,8 +89,8 @@ class RecaptchaTagLib {
      * Supports the following attributes:
      * <ul>
      * <li>theme - Can be one of 'dark' or 'light'. Defaults to 'light'</li>
-     * <li>lang  - Can be one of 'en','nl','fr','de','pt','ru','es','tr'</li>
      * <li>type - Can be one of 'image' or 'audio'. Defaults to 'image'</li>
+     * <li>size - Can be one of 'compact' or 'normal'. Defaults to 'normal'</li>
      * <li>successCallback - Optional function to be called when the user submits a successful response.</li>
      * <li>expiredCallback - Optional function to be called when the successful response has expired.</li>
      * <li>tabindex - Tabindex of the captcha, if required.</li>

@@ -2,7 +2,7 @@ package com.megatome.grails.recaptcha
 
 import com.megatome.grails.recaptcha.net.AuthenticatorProxy
 import com.megatome.grails.recaptcha.net.Post
-import com.megatome.grails.recaptcha.net.QueryString
+import com.megatome.grails.recaptcha.net.QueryParams
 
 /**
  * Copyright 2010-2015 Megatome Technologies
@@ -26,7 +26,7 @@ public class ReCaptcha {
     private static final String BASE_URL = "https://www.google.com/recaptcha/api"
     public static final String VERIFY_URL = "/siteverify"
     public static final String JS_URL = BASE_URL + ".js"
-    private static final Map<String, String> PARAMETER_MAPPING = ['theme': 'theme', 'type': 'type', 'successCallback': 'callback', 'expiredCallback': 'expired-callback', 'tabindex': 'tabindex']
+    private static final Map<String, String> PARAMETER_MAPPING = ['theme': 'theme', 'type': 'type', 'size': 'size', 'successCallback': 'callback', 'expiredCallback': 'expired-callback', 'tabindex': 'tabindex']
     private static final String AUTOMATIC_PREFIX = "data-"
 
     String publicKey
@@ -112,7 +112,7 @@ public class ReCaptcha {
      * @return
      */
     public static String createScriptTag(Map options) {
-        def qs = new QueryString()
+        def qs = new QueryParams()
         if (options?.lang) {
             qs.add("hl", URLEncoder.encode(options.remove("lang")))
         }
@@ -125,7 +125,7 @@ public class ReCaptcha {
      * @return
      */
     private static String createScriptTagExplicit(Map options) {
-        def qs = new QueryString()
+        def qs = new QueryParams()
         if (options?.lang) {
             qs.add("hl", URLEncoder.encode(options.remove("lang")))
         }
@@ -169,9 +169,9 @@ public class ReCaptcha {
      */
     public boolean checkAnswer(String remoteAddr, String response) {
         def post = new Post(url: BASE_URL + VERIFY_URL, proxy: proxy)
-        post.queryString.add("secret", privateKey)
-        post.queryString.add("response", response)
-        post.queryString.add("remoteip", remoteAddr)
+        post.queryParams.add("secret", privateKey)
+        post.queryParams.add("response", response)
+        post.queryParams.add("remoteip", remoteAddr)
 
         def responseObject = post.response
 
