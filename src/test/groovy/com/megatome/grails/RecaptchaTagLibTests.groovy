@@ -1,17 +1,30 @@
 package com.megatome.grails
 
+/**
+ * Copyright 2010-2015 Megatome Technologies
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
 @TestFor(RecaptchaTagLib)
-class RecaptchaTagLibTest extends Specification {
+class RecaptchaTagLibTests extends Specification {
     def recapMock = Mock(RecaptchaService.class)
-    def mailhideMock = Mock(MailhideService.class)
 
     def setup() {
-        mailhideMock.createMailhideURL(_ as String) >> "http://fake.url.com"
         tagLib.recaptchaService = recapMock
-        tagLib.mailhideService = mailhideMock
     }
 
     void "test recaptcha tag"() {
@@ -155,43 +168,5 @@ class RecaptchaTagLibTest extends Specification {
         then:
         1 * recapMock.validationFailed(_) >> false
         response.toString() == ""
-    }
-
-    void "test mailhide tag"() {
-        when:
-        tagLib.mailhide()
-
-        then:
-        thrown(IllegalArgumentException)
-
-        when:
-        def response = tagLib.mailhide(emailAddress: 'a@b.com', { "Link wrap text" }).toString()
-
-        then:
-        1 * mailhideMock.createMailhideURL("a@b.com") >> "http://fake.url.com"
-        response.contains("http://fake.url.com")
-        response.contains("Link wrap text")
-    }
-
-    void "test mailhideURL tag"() {
-        when:
-        tagLib.mailhideURL()
-
-        then:
-        thrown(IllegalArgumentException)
-
-        when:
-        def response = tagLib.mailhideURL(emailAddress: 'a@b.com', { var -> var }).toString()
-
-        then:
-        1 * mailhideMock.createMailhideURL("a@b.com") >> "http://fake.url.com"
-        response.contains("mailhideURL:")
-
-        when:
-        response = tagLib.mailhideURL([emailAddress: 'a@b.com', var: 'foo'], { var -> var }).toString()
-
-        then:
-        1 * mailhideMock.createMailhideURL("a@b.com") >> "http://fake.url.com"
-        response.contains("foo:")
     }
 }

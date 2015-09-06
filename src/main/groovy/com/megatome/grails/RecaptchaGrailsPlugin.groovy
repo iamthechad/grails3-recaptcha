@@ -1,8 +1,8 @@
-package grails.recaptcha
+package com.megatome.grails
 
 import grails.plugins.*
 
-class GrailsRecaptchaGrailsPlugin extends Plugin {
+class RecaptchaGrailsPlugin extends Plugin {
 
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "3.0.1 > *"

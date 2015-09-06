@@ -1,9 +1,8 @@
 package com.megatome.grails.recaptcha.net
 
-import com.megatome.grails.recaptcha.net.AuthenticatorProxy
 import spock.lang.Specification
 
-class AuthenticatorProxyTest extends Specification {
+class AuthenticatorProxyTests extends Specification {
     def setup() {
         Authenticator.default = null
     }

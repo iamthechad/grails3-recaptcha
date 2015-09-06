@@ -48,13 +48,13 @@
 
 # Introduction
 
-This plugin is designed to make using the ReCaptcha and Mailhide services within Grails 3 easy. In order to use this plugin, you must have a ReCaptcha account, available from [http://www.google.com/recaptcha](http://www.google.com/recaptcha).
+This plugin is designed to make using the ReCaptcha service within Grails 3 easy. In order to use this plugin, you must have a ReCaptcha account, available from [http://www.google.com/recaptcha](http://www.google.com/recaptcha).
 
 # Installation
 
 Add the following to your `build.gradle`
 
-    compile "org.grails.plugins:recaptcha:3.0.0"
+    compile "org.grails.plugins:recaptcha:3.1.0"
     
 ## Configuration
 Add the following to your application's `application.yml` file:
@@ -278,49 +278,6 @@ The `postText` parameter represents the response from the ReCaptcha server. Here
 	}
 
 
-# Usage - Mailhide
-
-## Edit the Configuration
-Add the following to your application's `application.yml` file:
-
-    mailhide:
-        publicKey: "mailhide public key"
-        privateKey: "mailhide private key"
-
-## Use the Tag Library
-
-The plugin includes two Mailhide tags: `<recaptcha:mailhide>` and `<recaptcha:mailhideURL>`.
-
-* The `<recaptcha:mailhide>` tag creates a Mailhide URL that opens in a new, pop-up window per the Mailhide specification. It supports one attribute: "emailAddress", to specify the email to be hidden. The link will be created around whatever content is in the body of the tag.
-* The `<recaptcha:mailhideURL>` tag creates a "raw" URL that can be used however desired. This is useful if the pop-up behavior of the other tag is not wanted. It supports two attributes: "emailAddress" and "var". The "emailAddress" attribute specifies the email to be hidden, while the "var" attribute specifies the name of the variable that the created URL should be available under in the page. The URL variable is only available in the context of the tag body.
-
-## Examples
-
-### mailhide tag
-
-    <recaptcha:mailhide emailAddress="x@example.com">Some text to wrap in a link</recaptcha:mailhide>
-
-
-will create:
-
-
-	<a href="http://www.google.com/recaptcha/mailhide/d?k=...publicKey...&c=..encryptedEmail..."
-	     onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k=...publicKey...&c=...encryptedEmail...', '', 
-	     'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" 
-	     title="Reveal this e-mail address">Some text to wrap in a link</a>
-
-
-### mailhideURL tag
-
-    <recaptcha:mailhideURL emailAddress="x@example.com" var="mu">
-        Created Mailhide URL: ${mu}
-    </recaptcha:mailhideURL>
-
-
-will create:
-
-    Created Mailhide URL: http://www.google.com/recaptcha/mailhide/d?k=...publicKey...&c=...encryptedEmail...
-    
 # Contributing
 
 ![Target Branch](https://img.shields.io/badge/target%20branch-version3__1__0-green.svg?style=flat-square)

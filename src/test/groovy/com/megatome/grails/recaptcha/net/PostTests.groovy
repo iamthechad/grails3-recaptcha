@@ -1,7 +1,5 @@
 package com.megatome.grails.recaptcha.net
 
-import com.megatome.grails.recaptcha.net.AuthenticatorProxy
-import com.megatome.grails.recaptcha.net.Post
 import grails.plugins.rest.client.RestBuilder
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
@@ -10,7 +8,7 @@ import org.springframework.test.web.client.match.MockRestRequestMatchers
 import org.springframework.test.web.client.response.MockRestResponseCreators
 import spock.lang.Specification
 
-class PostTest extends Specification {
+class PostTests extends Specification {
     def "Test basic POST"(){
         given:"A rest client instance"
         def rest = new RestBuilder()

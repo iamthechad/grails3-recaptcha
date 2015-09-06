@@ -1,6 +1,5 @@
 package com.megatome.grails.recaptcha
 
-import com.megatome.grails.recaptcha.ReCaptcha
 import com.megatome.grails.recaptcha.net.Post
 import com.megatome.grails.recaptcha.net.QueryParams
 import groovy.json.JsonSlurper
@@ -23,7 +22,7 @@ import spock.lang.Specification
  * limitations under the License.
  */
 
-class ReCaptchaTest extends Specification {
+class ReCaptchaTests extends Specification {
     private ReCaptcha r;
 
     def setup() {
