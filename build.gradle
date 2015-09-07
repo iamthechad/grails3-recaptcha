@@ -85,12 +85,12 @@ bintray {
         userOrg = ''
         repo = "plugins"
         name = project.name
-        desc = "Grails 3 ReCaptcha and MailHide plugin"
+        desc = "Grails 3 ReCaptcha plugin"
         websiteUrl = "https://github.com/iamthechad/grails3-recaptcha"
         issueTrackerUrl = "https://github.com/iamthechad/grails3-recaptcha/issues"
         vcsUrl = "https://github.com/iamthechad/grails3-recaptcha.git"
         licenses = ["Apache-2.0"]
-        labels = ["recaptcha", "mailhide"]
+        labels = ["recaptcha"]
         publicDownloadNumbers = true
     }
 }
