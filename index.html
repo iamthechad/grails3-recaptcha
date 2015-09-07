@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>ReCaptcha for Grails 3 by iamthechad</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>ReCaptcha for Grails 3</h1>
+        <h2></h2>
+        <a href="https://github.com/iamthechad/grails3-recaptcha" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          
+
+
+
+<p><strong>Table of Contents</strong>  <em>generated with <a href="https://github.com/thlorenz/doctoc">DocToc</a></em></p>
+
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li>
+<a href="#installation">Installation</a>
+
+<ul>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#externalized-configuration">Externalized Configuration</a></li>
+</ul>
+</li>
+<li>
+<a href="#usage---recaptcha">Usage - ReCaptcha</a>
+
+<ul>
+<li>
+<a href="#edit-the-configuration">Edit the Configuration</a>
+
+<ul>
+<li><a href="#proxy-server-configuration">Proxy Server Configuration</a></li>
+</ul>
+</li>
+<li>
+<a href="#use-the-tag-library">Use the Tag Library</a>
+
+<ul>
+<li><a href="#recaptchaifenabled"><code>&lt;recaptcha:ifEnabled&gt;</code></a></li>
+<li><a href="#recaptchaifdisabled"><code>&lt;recaptcha:ifDisabled&gt;</code></a></li>
+<li><a href="#recaptcharecaptcha"><code>&lt;recaptcha:recaptcha&gt;</code></a></li>
+<li><a href="#recaptchascript"><code>&lt;recaptcha:script&gt;</code></a></li>
+<li><a href="#recaptcharecaptchaexplicit"><code>&lt;recaptcha:recaptchaExplicit&gt;</code></a></li>
+<li><a href="#recaptcharenderparameters"><code>&lt;recaptcha:renderParameters&gt;</code></a></li>
+<li><a href="#recaptchaiffailed"><code>&lt;recaptcha:ifFailed&gt;</code></a></li>
+</ul>
+</li>
+<li><a href="#verify-the-captcha">Verify the Captcha</a></li>
+<li>
+<a href="#examples">Examples</a>
+
+<ul>
+<li><a href="#tag-usage-for-automatic-rendering">Tag Usage for Automatic Rendering</a></li>
+<li><a href="#tag-usage-for-explicit-rendering">Tag Usage for Explicit Rendering</a></li>
+<li><a href="#tag-usage-with-separate-script">Tag Usage with Separate Script</a></li>
+<li><a href="#customizing-the-language">Customizing the Language</a></li>
+<li><a href="#verify-user-input">Verify User Input</a></li>
+<li><a href="#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#usage---mailhide">Usage - Mailhide</a>
+
+<ul>
+<li><a href="#edit-the-configuration-1">Edit the Configuration</a></li>
+<li><a href="#use-the-tag-library-1">Use the Tag Library</a></li>
+<li>
+<a href="#examples-1">Examples</a>
+
+<ul>
+<li><a href="#mailhide-tag">mailhide tag</a></li>
+<li><a href="#mailhideurl-tag">mailhideURL tag</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#contributing">Contributing</a>
+
+<ul>
+<li><a href="#before-submission">Before Submission</a></li>
+<li><a href="#when-submitting">When Submitting</a></li>
+</ul>
+</li>
+<li><a href="#suggestions-or-comments">Suggestions or Comments</a></li>
+</ul>
+
+
+
+<p><img src="https://img.shields.io/badge/target%20branch-version3__1__0-green.svg?style=flat-square" alt="Target Branch"></p>
+
+<h1>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h1>
+
+<p>This plugin is designed to make using the ReCaptcha and Mailhide services within Grails 3 easy. In order to use this plugin, you must have a ReCaptcha account, available from <a href="http://www.google.com/recaptcha">http://www.google.com/recaptcha</a>.</p>
+
+<h1>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<p>Add the following to your <code>build.gradle</code></p>
+
+<pre><code>compile "org.grails.plugins:recaptcha:3.0.0"
+</code></pre>
+
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration</h2>
+
+<p>Add the following to your application's <code>application.yml</code> file:</p>
+
+<pre><code>recaptcha:
+    publicKey: "your public key"
+    privateKey: "your private key"
+    includeScript: true
+    includeNoScript: true
+</code></pre>
+
+<p>These configurations can also be placed at environment-specific locations in the configuration:</p>
+
+<pre><code>environments:
+    development:
+        recaptcha:
+            enabled: false
+    production:
+        recaptcha:
+            enabled: true
+</code></pre>
+
+<h2>
+<a id="externalized-configuration" class="anchor" href="#externalized-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Externalized Configuration</h2>
+
+<p>See the Grails docs for examples of using externalized configuration files. The ReCaptcha config can be externalized as
+the <code>.groovy</code> file (easiest), or it can be converted into a Java <code>.properties</code> file.</p>
+
+<h1>
+<a id="usage---recaptcha" class="anchor" href="#usage---recaptcha" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage - ReCaptcha</h1>
+
+<p>The plugin is simple to use. In order to use it, there are four basic steps:</p>
+
+<h2>
+<a id="edit-the-configuration" class="anchor" href="#edit-the-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Edit the Configuration</h2>
+
+<p>The configuration values are pretty self-explanatory, and match with values used by the ReCaptcha service. You must enter your public and private ReCaptcha keys, or errors will be thrown when trying to display a captcha.</p>
+
+<h3>
+<a id="proxy-server-configuration" class="anchor" href="#proxy-server-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Proxy Server Configuration</h3>
+
+<p>If your server needs to connect through a proxy to the ReCaptcha service, add the following to the ReCapctcha configuration. <strong>These properties are not created by the quickstart script. They must be added manually.</strong></p>
+
+<pre><code>recaptcha:
+    proxy:
+        server: ""   // IP or hostname of proxy server
+        port: ""     // Proxy server port, defaults to 80
+        username: "" // Optional username if proxy requires authentication
+        password: "" // Optional password if proxy requires authentication
+</code></pre>
+
+<p>Only the <code>server</code> property is required. The <code>port</code> will default to <code>80</code> if not specified. The <code>username</code> and <code>password</code> properties need to be specified only when the proxy requires authentication.</p>
+
+<p>Like other configurations, this can be placed at the top-level <code>recaptcha</code> entry, or it can be specified on a per-environment basis.</p>
+
+<h2>
+<a id="use-the-tag-library" class="anchor" href="#use-the-tag-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use the Tag Library</h2>
+
+<h3>
+<a id="recaptchaifenabled" class="anchor" href="#recaptchaifenabled" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>&lt;recaptcha:ifEnabled&gt;</code>
+</h3>
+
+<p>This tag is a simple utility that will render its contents if the captcha is enabled in the configuration.</p>
+
+<h3>
+<a id="recaptchaifdisabled" class="anchor" href="#recaptchaifdisabled" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>&lt;recaptcha:ifDisabled&gt;</code>
+</h3>
+
+<p>This tag is a simple utility that will render its contents if the captcha is disabled in the configuration.</p>
+
+<h3>
+<a id="recaptcharecaptcha" class="anchor" href="#recaptcharecaptcha" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>&lt;recaptcha:recaptcha&gt;</code>
+</h3>
+
+<p>This tag is responsible for generating the correct HTML output to display the captcha. It supports the following attributes: </p>
+
+<ul>
+<li>
+<code>theme</code> - Can be one of <code>dark</code> or <code>light</code>. Defaults to <code>light</code>.</li>
+<li>
+<code>lang</code> - Can be any one of the supported ReCaptcha language codes. See the <a href="https://developers.google.com/recaptcha/docs/language">list of supported language codes</a>.</li>
+<li>
+<code>tabindex</code> - Optional tabindex of the widget. </li>
+<li>
+<code>type</code> - Type of captcha to display if the checkbox is not sufficient. Can be one of <code>image</code> or <code>audio</code>. Defaults to <code>image</code>.</li>
+<li>
+<code>successCallback</code> - Optional function to be called when the user submits a successful response.</li>
+<li>
+<code>expiredCallback</code> - Optional function to be called when the successful response has expired.</li>
+<li>
+<code>includeScript</code> - If <code>includeScript</code> is set to <code>false</code> at either the global or tag level, the <code>&lt;script&gt;</code> tag required by ReCaptcha will not be included in the generated HTML. The <code>&lt;recaptcha:script&gt;</code> tag is also required in this scenario.</li>
+</ul>
+
+<p>See the <a href="https://developers.google.com/recaptcha/docs/display#config">ReCaptcha Client Guide</a> for more details.</p>
+
+<h3>
+<a id="recaptchascript" class="anchor" href="#recaptchascript" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>&lt;recaptcha:script&gt;</code>
+</h3>
+
+<p>This tag will render the required <code>&lt;script&gt;</code> tag. Combine this with the global or tag-level <code>includeScript=false</code> setting to allow putting the <code>&lt;script&gt;</code> tag elsewhere in your markup. This tag also supports the "lang" attribute. <strong>This does not work in the <code>&lt;head&gt;</code> section of the page</strong></p>
+
+<h3>
+<a id="recaptcharecaptchaexplicit" class="anchor" href="#recaptcharecaptchaexplicit" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>&lt;recaptcha:recaptchaExplicit&gt;</code>
+</h3>
+
+<p>This tag is responsible for generating the correct HTML output to support explicit display and usage of the captcha. It supports the following attributes: </p>
+
+<ul>
+<li>
+<code>lang</code> - Can be any one of the supported ReCaptcha language codes. See the <a href="https://developers.google.com/recaptcha/docs/language">list of supported language codes</a>.</li>
+<li>
+<code>loadCallback</code> - The JavaScript function to be called when all dependencies have loaded. This function is usually responsible for rendering the captcha.</li>
+</ul>
+
+<p>For more information about explicit mode captchas, see <a href="https://developers.google.com/recaptcha/docs/display#explicit_render">the ReCaptcha documentation</a>.</p>
+
+<h3>
+<a id="recaptcharenderparameters" class="anchor" href="#recaptcharenderparameters" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>&lt;recaptcha:renderParameters&gt;</code>
+</h3>
+
+<p>This utility tag will generate the JSON string used as a parameter to the <code>grecaptcha.render()</code> function. It supports the following attributes:</p>
+
+<ul>
+<li>
+<code>theme</code> - Can be one of <code>dark</code> or <code>light</code>. Defaults to <code>light</code>.</li>
+<li>
+<code>tabindex</code> - Optional tabindex of the widget. </li>
+<li>
+<code>type</code> - Type of captcha to display if the checkbox is not sufficient. Can be one of <code>image</code> or <code>audio</code>. Defaults to <code>image</code>.</li>
+<li>
+<code>successCallback</code> - Optional function to be called when the user submits a successful response.</li>
+<li>
+<code>expiredCallback</code> - Optional function to be called when the successful response has expired.</li>
+</ul>
+
+<p>See the <a href="https://developers.google.com/recaptcha/docs/display#config">ReCaptcha Client Guide</a> for more details.</p>
+
+<h3>
+<a id="recaptchaiffailed" class="anchor" href="#recaptchaiffailed" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>&lt;recaptcha:ifFailed&gt;</code>
+</h3>
+
+<p>This tag will render its contents if the previous validation failed.</p>
+
+<h2>
+<a id="verify-the-captcha" class="anchor" href="#verify-the-captcha" aria-hidden="true"><span class="octicon octicon-link"></span></a>Verify the Captcha</h2>
+
+<p>In your controller, call <code>recaptchaService.verifyAnswer(session, request.getRemoteAddr(), params)</code> to verify the answer provided by the user. This method will return true or false. Also note that <code>verifyAnswer</code> will return <code>true</code> if the plugin has been disabled in the configuration - this means you won't have to change your controller.</p>
+
+<h2>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<p>Here's a simple example pulled from an account creation application.</p>
+
+<h3>
+<a id="tag-usage-for-automatic-rendering" class="anchor" href="#tag-usage-for-automatic-rendering" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tag Usage for Automatic Rendering</h3>
+
+<p>This is the most common usage scenario.</p>
+
+<p>In our GSP, we add the code to show the captcha:</p>
+
+<pre><code>&lt;recaptcha:ifEnabled&gt;
+    &lt;recaptcha:recaptcha theme="dark"/&gt;
+&lt;/recaptcha:ifEnabled&gt;
+</code></pre>
+
+<p>In this example, we're using ReCaptcha's <code>dark</code> theme. Leaving out the <code>theme</code> attribute will default the captcha to the <code>light</code> theme.</p>
+
+<h3>
+<a id="tag-usage-for-explicit-rendering" class="anchor" href="#tag-usage-for-explicit-rendering" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tag Usage for Explicit Rendering</h3>
+
+<p>In our GSP, we add code like the following:</p>
+
+<pre><code>&lt;script type="text/javascript"&gt;
+  var onloadCallback = function() {
+    grecaptcha.render('html_element', &lt;recaptcha:renderParameters theme="dark" type="audio" tabindex="2"/&gt;);
+  };
+&lt;/script&gt;
+&lt;g:form action="myAction" method="post"&gt;
+  &lt;recaptcha:ifEnabled&gt;
+    &lt;recaptcha:recaptchaExplicit loadCallback="onloadCallback"/&gt;
+    &lt;div id="html_element"&gt;&lt;/div&gt;
+  &lt;/recaptcha:ifEnabled&gt;
+  &lt;br/&gt;
+  &lt;g:submitButton name="submit"/&gt;
+&lt;/g:form&gt;
+</code></pre>
+
+<p>In this example, we're using ReCaptcha's <code>dark</code> theme, with an <code>audio</code> captcha and a <code>tabindex</code> of 2.</p>
+
+<p>For more information about explicit mode captchas, see <a href="https://developers.google.com/recaptcha/docs/display#explicit_render">the ReCaptcha documentation</a>.</p>
+
+<h3>
+<a id="tag-usage-with-separate-script" class="anchor" href="#tag-usage-with-separate-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tag Usage with Separate Script</h3>
+
+<p>Set the <code>includeScript</code> value to <code>false</code> either at the tag level (below), or in the global ReCaptcha settings.</p>
+
+<pre><code>&lt;body&gt;
+  &lt;g:form action="validateNormal" method="post" &gt;
+    &lt;recaptcha:ifEnabled&gt;
+      &lt;recaptcha:recaptcha includeScript="false"/&gt;
+    &lt;/recaptcha:ifEnabled&gt;
+    &lt;br/&gt;
+    &lt;g:submitButton name="submit"/&gt;
+  &lt;/g:form&gt;
+  &lt;recaptcha:script/&gt;
+&lt;/body&gt;
+</code></pre>
+
+<p>This will cause the <code>&lt;script src="https://www.google.com/recaptcha/api.js?" async="" defer=""&gt;&lt;/script&gt;</code> tag to be output separately at the bottom of the document instead of just before the <code>&lt;div&gt;</code> containing the captcha.</p>
+
+<h3>
+<a id="customizing-the-language" class="anchor" href="#customizing-the-language" aria-hidden="true"><span class="octicon octicon-link"></span></a>Customizing the Language</h3>
+
+<p>If you want to change the language your captcha uses, set <code>lang = "someLang"</code> in the <code>&lt;recaptcha:recaptcha&gt;</code> or <code>&lt;recaptcha:recaptchaExplcit&gt;</code> tags.</p>
+
+<p>See <a href="https://developers.google.com/recaptcha/docs/language">ReCaptcha Language Codes</a> for available languages.</p>
+
+<h3>
+<a id="verify-user-input" class="anchor" href="#verify-user-input" aria-hidden="true"><span class="octicon octicon-link"></span></a>Verify User Input</h3>
+
+<p>Here's an abbreviated controller class that verifies the captcha value when a new user is saved:</p>
+
+<pre><code>import com.megatome.grails.RecaptchaService
+class UserController {
+    RecaptchaService recaptchaService
+
+    def save = {
+        def user = new User(params)
+        ...other validation...
+        def recaptchaOK = true
+        if (!recaptchaService.verifyAnswer(session, request.getRemoteAddr(), params)) {
+            recaptchaOK = false
+        }
+        if(!user.hasErrors() &amp;&amp; recaptchaOK &amp;&amp; user.save()) {
+            recaptchaService.cleanUp(session)
+            ...other account creation acivities...
+            render(view:'showConfirmation',model:[user:user])
+        }
+        else {
+            render(view:'create',model:[user:user])
+        }
+    }
+}
+</code></pre>
+
+<h3>
+<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing</h3>
+
+<p>You can look at the test cases in the plugin itself, or you can implement something similar to:</p>
+
+<pre><code>private void buildAndCheckAnswer(def postText, def expectedValid, def expectedErrorMessage) {
+    def mocker = new MockFor(Post.class)
+    mocker.demand.getQueryString(3..3) { new QueryString() }
+    mocker.demand.getResponse { new JsonSlurper().parseText(postText) }
+    mocker.use {
+        def response = r.checkAnswer("123.123.123.123", "response")
+
+        assertTrue response == expectedValid
+    }
+}
+</code></pre>
+
+<p>The <code>postText</code> parameter represents the response from the ReCaptcha server. Here are examples of simulating success and failure results:</p>
+
+<pre><code>public void testCheckAnswerSuccess() {
+    def answer = """{ "success": true }"""
+    buildAndCheckAnswer(answer, true)
+}
+
+public void testCheckAnswerFail() {
+    def answer = """{ "success": false }"""
+    buildAndCheckAnswer(answer, false)
+}
+</code></pre>
+
+<h1>
+<a id="usage---mailhide" class="anchor" href="#usage---mailhide" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage - Mailhide</h1>
+
+<h2>
+<a id="edit-the-configuration-1" class="anchor" href="#edit-the-configuration-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Edit the Configuration</h2>
+
+<p>Add the following to your application's <code>application.yml</code> file:</p>
+
+<pre><code>mailhide:
+    publicKey: "mailhide public key"
+    privateKey: "mailhide private key"
+</code></pre>
+
+<h2>
+<a id="use-the-tag-library-1" class="anchor" href="#use-the-tag-library-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use the Tag Library</h2>
+
+<p>The plugin includes two Mailhide tags: <code>&lt;recaptcha:mailhide&gt;</code> and <code>&lt;recaptcha:mailhideURL&gt;</code>.</p>
+
+<ul>
+<li>The <code>&lt;recaptcha:mailhide&gt;</code> tag creates a Mailhide URL that opens in a new, pop-up window per the Mailhide specification. It supports one attribute: "emailAddress", to specify the email to be hidden. The link will be created around whatever content is in the body of the tag.</li>
+<li>The <code>&lt;recaptcha:mailhideURL&gt;</code> tag creates a "raw" URL that can be used however desired. This is useful if the pop-up behavior of the other tag is not wanted. It supports two attributes: "emailAddress" and "var". The "emailAddress" attribute specifies the email to be hidden, while the "var" attribute specifies the name of the variable that the created URL should be available under in the page. The URL variable is only available in the context of the tag body.</li>
+</ul>
+
+<h2>
+<a id="examples-1" class="anchor" href="#examples-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<h3>
+<a id="mailhide-tag" class="anchor" href="#mailhide-tag" aria-hidden="true"><span class="octicon octicon-link"></span></a>mailhide tag</h3>
+
+<pre><code>&lt;recaptcha:mailhide emailAddress="x@example.com"&gt;Some text to wrap in a link&lt;/recaptcha:mailhide&gt;
+</code></pre>
+
+<p>will create:</p>
+
+<pre><code>&lt;a href="http://www.google.com/recaptcha/mailhide/d?k=...publicKey...&amp;c=..encryptedEmail..."
+     onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k=...publicKey...&amp;c=...encryptedEmail...', '', 
+     'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" 
+     title="Reveal this e-mail address"&gt;Some text to wrap in a link&lt;/a&gt;
+</code></pre>
+
+<h3>
+<a id="mailhideurl-tag" class="anchor" href="#mailhideurl-tag" aria-hidden="true"><span class="octicon octicon-link"></span></a>mailhideURL tag</h3>
+
+<pre><code>&lt;recaptcha:mailhideURL emailAddress="x@example.com" var="mu"&gt;
+    Created Mailhide URL: ${mu}
+&lt;/recaptcha:mailhideURL&gt;
+</code></pre>
+
+<p>will create:</p>
+
+<pre><code>Created Mailhide URL: http://www.google.com/recaptcha/mailhide/d?k=...publicKey...&amp;c=...encryptedEmail...
+</code></pre>
+
+<h1>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h1>
+
+<p><img src="https://img.shields.io/badge/target%20branch-version3__1__0-green.svg?style=flat-square" alt="Target Branch"></p>
+
+<p>Contributions are welcome, but there a couple of guidelines that will make everything easier.</p>
+
+<h2>
+<a id="before-submission" class="anchor" href="#before-submission" aria-hidden="true"><span class="octicon octicon-link"></span></a>Before Submission</h2>
+
+<ul>
+<li>Make sure that all unit tests before submitting a pull request.</li>
+</ul>
+
+<h2>
+<a id="when-submitting" class="anchor" href="#when-submitting" aria-hidden="true"><span class="octicon octicon-link"></span></a>When Submitting</h2>
+
+<ul>
+<li>Be sure to submit pull requests against the current "target branch". This will ensure that changes are applied to the correct version.</li>
+<li>Make sure that commits have descriptive text that clearly explains the change. (See <a href="http://chris.beams.io/posts/git-commit/">http://chris.beams.io/posts/git-commit/</a> for tips on writing good commit messages.)</li>
+<li>Reference appropriate issues or pull requests if needed. (Use <code>refs XXX</code> instead of <code>fixes XXX</code> or <code>closes XXX</code>)</li>
+</ul>
+
+<h1>
+<a id="suggestions-or-comments" class="anchor" href="#suggestions-or-comments" aria-hidden="true"><span class="octicon octicon-link"></span></a>Suggestions or Comments</h1>
+
+<p>Feel free to submit questions through GitHub or to StackOverflow.</p>
+
+<p>Alternatively you can contact me directly - cjohnston at megatome dot com</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/iamthechad/grails3-recaptcha/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/iamthechad/grails3-recaptcha/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/iamthechad/grails3-recaptcha"></a> is maintained by <a href="https://github.com/iamthechad">iamthechad</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
