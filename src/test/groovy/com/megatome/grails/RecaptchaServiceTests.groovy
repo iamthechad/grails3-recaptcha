@@ -236,7 +236,7 @@ class RecaptchaServiceTests extends Specification {
 
     void "test verify check validation failed in session"() {
         setup:
-        def session = [:]
+        def session = new GrailsMockHttpSession()
 
         expect:
         !service.validationFailed(session)
@@ -250,7 +250,7 @@ class RecaptchaServiceTests extends Specification {
 
     void "test verify clean up session"() {
         setup:
-        def session = [recaptcha_error: "true", other_data: "foo"]
+        def session = new GrailsMockHttpSession([recaptcha_error: "true", other_data: "foo"])
 
         when:
         service.cleanUp(session)

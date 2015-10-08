@@ -26,7 +26,7 @@ import javax.servlet.http.HttpSession
  */
 @CompileStatic
 class RecaptchaService {
-//    boolean transactional = false
+    boolean transactional = false;
     GrailsApplication grailsApplication
     private PropertySourcesConfig recaptchaConfig = null
     private ReCaptcha recap = null
@@ -157,7 +157,7 @@ class RecaptchaService {
      *
      * @return True if the supplied answer is correct, false otherwise. Returns true if ReCaptcha support is disabled.
      */
-    Boolean verifyAnswer(HttpSession session, String remoteAddress, Map params) {
+    Boolean verifyAnswer(HttpSession session, String remoteAddress, Map<String, Object> params) {
         if (!isEnabled()) {
             return true
         }
@@ -179,7 +179,7 @@ class RecaptchaService {
      *
      * @param session The current session
      */
-    Boolean validationFailed(session) {
+    Boolean validationFailed(HttpSession session) {
         return (session["recaptcha_error"] != null)
     }
 
@@ -189,7 +189,7 @@ class RecaptchaService {
      *
      * @param session The current session.
      */
-    void cleanUp(session) {
+    void cleanUp(HttpSession session) {
         session["recaptcha_error"] = null
     }
 }
