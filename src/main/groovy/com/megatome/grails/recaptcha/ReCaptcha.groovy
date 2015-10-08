@@ -114,7 +114,7 @@ public class ReCaptcha {
     public static String createScriptTag(Map options) {
         def qs = new QueryParams()
         if (options?.lang) {
-            qs.add("hl", URLEncoder.encode(options.remove("lang")))
+            qs.add("hl", URLEncoder.encode(options.remove("lang").toString(), "UTF8"))
         }
         return "<script src=\"${JS_URL}?${qs.toString()}\" async defer></script>"
     }

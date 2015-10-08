@@ -22,6 +22,7 @@ import grails.test.runtime.FreshRuntime
 import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
 import groovy.mock.interceptor.StubFor
+import org.grails.plugins.testing.GrailsMockHttpSession
 import spock.lang.Specification
 
 @FreshRuntime
@@ -196,7 +197,7 @@ class RecaptchaServiceTests extends Specification {
         config.recaptcha.enabled = false
 
         expect:
-        service.verifyAnswer([:], "127.0.0.1", [:])
+        service.verifyAnswer(new GrailsMockHttpSession(), "127.0.0.1", [:])
     }
 
     void "test verify answer true"() {
@@ -207,7 +208,7 @@ class RecaptchaServiceTests extends Specification {
         when:
         def recapStub = new StubFor(ReCaptcha.class)
         recapStub.demand.checkAnswer { remoteAddr, response -> true }
-        def session = [:]
+        def session = new GrailsMockHttpSession()
 
         then:
         recapStub.use {
@@ -220,7 +221,7 @@ class RecaptchaServiceTests extends Specification {
         setup:
         config.recaptcha.publicKey = "ABC"
         config.recaptcha.privateKey = "123"
-        def session = [:]
+        def session = new GrailsMockHttpSession()
 
         when:
         def recapStub = new StubFor(ReCaptcha.class)
@@ -229,7 +230,7 @@ class RecaptchaServiceTests extends Specification {
         then:
         recapStub.use {
             !service.verifyAnswer(session, "127.0.0.1", ["g-recaptcha-response": "foo"])
-            !session.containsKey("recaptcha_error")
+            !session.getProperty("recaptcha_error")
         }
     }
 

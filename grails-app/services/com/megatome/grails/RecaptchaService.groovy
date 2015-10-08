@@ -2,8 +2,12 @@ package com.megatome.grails
 
 import com.megatome.grails.recaptcha.ReCaptcha
 import com.megatome.grails.recaptcha.net.AuthenticatorProxy
-import com.megatome.grails.util.ConfigHelper
+import grails.core.GrailsApplication
 import grails.util.Environment
+import groovy.transform.CompileStatic
+import org.grails.config.PropertySourcesConfig
+
+import javax.servlet.http.HttpSession
 
 /**
  * Copyright 2010-2015 Megatome Technologies
@@ -20,69 +24,83 @@ import grails.util.Environment
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+@CompileStatic
 class RecaptchaService {
-    boolean transactional = false
-    def grailsApplication
-    private def recaptchaConfig = null
-    private def recap = null
+//    boolean transactional = false
+    GrailsApplication grailsApplication
+    private PropertySourcesConfig recaptchaConfig = null
+    private ReCaptcha recap = null
 
     /**
      * Gets the ReCaptcha config.
      */
-    private def getRecaptchaConfig() {
-        if (this.recaptchaConfig == null) {
+    private PropertySourcesConfig getRecaptchaConfig() {
+        if (recaptchaConfig == null) {
             if (grailsApplication.config.recaptcha) {
-                this.recaptchaConfig = grailsApplication.config.recaptcha
+                recaptchaConfig = new PropertySourcesConfig()
+                recaptchaConfig.putAll(grailsApplication.config.getProperty('recaptcha', Map))
             } else {
                 ClassLoader parent = getClass().getClassLoader()
                 GroovyClassLoader loader = new GroovyClassLoader(parent)
                 try {
                     def rc = loader.loadClass("RecaptchaConfig")
-                    def cfg = new ConfigSlurper(Environment.current.name).parse(rc)
-                    this.recaptchaConfig = cfg.recaptcha
+                    Map cfg = new ConfigSlurper(Environment.current.name).parse(rc).flatten()
+                    recaptchaConfig = new PropertySourcesConfig()
+                    recaptchaConfig.putAll(cfg)
                 } catch (ClassNotFoundException e) {
                     throw new IllegalArgumentException("ReCaptcha configuration not specified. Run the quickstart script.")
                 }
             }
-            if (!this.recaptchaConfig.publicKey || this.recaptchaConfig.publicKey.length() == 0) {
+            if (!recaptchaConfig.containsKey('publicKey') || recaptchaConfig.getProperty('publicKey', String).length() == 0) {
                 throw new IllegalArgumentException("ReCaptcha Public Key must be specified in RecaptchaConfig")
             }
-            if (!this.recaptchaConfig.privateKey || this.recaptchaConfig.privateKey.length() == 0) {
+            if (!recaptchaConfig.containsKey('privateKey') || recaptchaConfig.getProperty('privateKey', String).length() == 0) {
                 throw new IllegalArgumentException("ReCaptcha Private Key must be specified in RecaptchaConfig")
             }
         }
-        return this.recaptchaConfig
+        recaptchaConfig
     }
 
-    private def getRecaptchaInstance() {
+    private ReCaptcha getRecaptchaInstance() {
         if (!recap) {
             // Public key, private key, include noscript, include script, proxy config
-            def config = getRecaptchaConfig()
-            def proxyConfig = config.proxy
-            def proxy = new AuthenticatorProxy(
-                    server: proxyConfig.containsKey('server') ? proxyConfig.server : null,
-                    port: proxyConfig.containsKey('port') ? Integer.parseInt(proxyConfig.port) : 80,
-                    username: proxyConfig.containsKey('username') ? proxyConfig.username : null,
-                    password: proxyConfig.containsKey('password') ? proxyConfig.password : ""
+            PropertySourcesConfig proxyConfig = getRecaptchaConfig().getProperty('proxy', PropertySourcesConfig) ?: new PropertySourcesConfig()
+            AuthenticatorProxy proxy = new AuthenticatorProxy(
+                    server: getConfigProperty(proxyConfig, 'server', String),
+                    port: proxyConfig.containsKey('port') ? Integer.parseInt(getConfigProperty(proxyConfig, 'port', String)) : 80,
+                    username: getConfigProperty(proxyConfig, 'username', String),
+                    password: getConfigProperty(proxyConfig, 'password', String) ?: ""
             )
             recap = new ReCaptcha(
-                    publicKey: config.publicKey,
-                    privateKey: config.privateKey,
-                    includeNoScript: safeGetConfigValue('includeNoScript', true),
-                    includeScript: safeGetConfigValue('includeScript', true),
+                    publicKey: getConfigProperty('publicKey', String),
+                    privateKey: getConfigProperty('privateKey', String),
+                    includeNoScript: getConfigProperty('includeNoScript', true),
+                    includeScript: getConfigProperty('includeScript', true),
                     proxy: proxy)
         }
         recap
     }
 
-    private boolean safeGetConfigValue(def value, def defaultValue) {
-        def config = getRecaptchaConfig()
-        if (config.containsKey(value)) {
-            return ConfigHelper.booleanValue(config[value])
+    private <T> T getConfigProperty(String key, Class<T> targetType) {
+        getConfigProperty(getRecaptchaConfig(), key, targetType)
+    }
+
+    private Boolean getConfigProperty(String key, Boolean defaultValue) {
+        PropertySourcesConfig config = getRecaptchaConfig()
+        if(config.containsKey(key)){
+            getConfigProperty(config, key, Boolean)
+        } else {
+            log.error("Tried to access missing ReCaptcha value '" + key + "'. Using default value of '" + defaultValue + "'")
+            defaultValue
         }
-        log.error("Tried to access missing ReCaptcha value '" + value + "'. Using default value of '" + defaultValue + "'")
-        defaultValue
+    }
+
+    private <T> T getConfigProperty(PropertySourcesConfig config, String key, Class<T> targetType) {
+        if (config.containsKey(key)) {
+            config.getProperty(key, targetType)
+        } else {
+            null
+        }
     }
 
     /**
@@ -94,7 +112,7 @@ class RecaptchaService {
      *
      * @return HTML code, suitable for embedding into a webpage.
      */
-    def createCaptcha(props) {
+    String createCaptcha(Map props) {
         return getRecaptchaInstance().createRecaptchaHtml(props)
     }
 
@@ -105,7 +123,7 @@ class RecaptchaService {
      * @param props Options for rendering; <code>lang</code>, and <code>loadCallback</code> are currently supported by recaptcha.
      * @return HTML code, suitable for embedding into a webpage.
      */
-    def createCaptchaExplicit(props) {
+    String createCaptchaExplicit(Map props) {
         return getRecaptchaInstance().createRecaptchaExplicitHtml(props)
     }
 
@@ -114,7 +132,7 @@ class RecaptchaService {
      * @param props Options for rendering; <code>theme</code>, <code>type</code>, <code>tabindex</code>, <code>callback</code>, <code>expired-callback</code> are currently supported
      * @return
      */
-    def createRenderParameters(props) {
+    String createRenderParameters(Map props) {
         return getRecaptchaInstance().createRenderParameters(props)
     }
 
@@ -126,7 +144,7 @@ class RecaptchaService {
      *
      * @return HTML code, suitable for embedding into a webpage.
      */
-    def createScriptEntry(props) {
+    String createScriptEntry(Map props) {
         return getRecaptchaInstance().createScriptTag(props)
     }
 
@@ -139,12 +157,12 @@ class RecaptchaService {
      *
      * @return True if the supplied answer is correct, false otherwise. Returns true if ReCaptcha support is disabled.
      */
-    def verifyAnswer(session, remoteAddress, params) {
+    Boolean verifyAnswer(HttpSession session, String remoteAddress, Map params) {
         if (!isEnabled()) {
             return true
         }
 
-        def success = getRecaptchaInstance().checkAnswer(remoteAddress, params["g-recaptcha-response"].trim())
+        Boolean success = getRecaptchaInstance().checkAnswer(remoteAddress, params.get("g-recaptcha-response").toString().trim())
         session["recaptcha_error"] = success ? null : true
         return success
     }
@@ -152,8 +170,8 @@ class RecaptchaService {
     /**
      * Get a value indicating if the ReCaptcha plugin should be enabled.
      */
-    def isEnabled() {
-        return safeGetConfigValue('enabled', true)
+    Boolean isEnabled() {
+        return getConfigProperty('enabled', true)
     }
 
     /**
@@ -161,7 +179,7 @@ class RecaptchaService {
      *
      * @param session The current session
      */
-    def validationFailed(session) {
+    Boolean validationFailed(session) {
         return (session["recaptcha_error"] != null)
     }
 
@@ -171,7 +189,7 @@ class RecaptchaService {
      *
      * @param session The current session.
      */
-    def cleanUp(session) {
+    void cleanUp(session) {
         session["recaptcha_error"] = null
     }
 }
