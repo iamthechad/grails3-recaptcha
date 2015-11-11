@@ -258,4 +258,21 @@ class RecaptchaServiceTests extends Specification {
         session["recaptcha_error"] == null
         session["other_data"] == "foo"
     }
+    
+    void "test verify doesn't throw an NPE with no recaptcha param"() {
+        setup:
+        config.recaptcha.publicKey = "ABC"
+        config.recaptcha.privateKey = "123"
+        def session = [:]
+
+        when:
+        def recapStub = new StubFor(ReCaptcha.class)
+        recapStub.demand.checkAnswer { remoteAddr, response -> false }
+        recapStub.use {
+            service.verifyAnswer(session, "127.0.0.1", [:])
+        }
+
+        then:
+        notThrown(NullPointerException)
+    }
 }
