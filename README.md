@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/iamthechad/grails3-recaptcha.svg?branch=v3_1_0)](https://travis-ci.org/iamthechad/grails3-recaptcha)
-[![Coverage Status](https://coveralls.io/repos/iamthechad/grails3-recaptcha/badge.svg?branch=v3_1_0&service=github)](https://coveralls.io/github/iamthechad/grails3-recaptcha?branch=v3_1_0)
+[![Build Status](https://travis-ci.org/iamthechad/grails3-recaptcha.svg?branch=v3.x)](https://travis-ci.org/iamthechad/grails3-recaptcha)
+[![Coverage Status](https://coveralls.io/repos/iamthechad/grails3-recaptcha/badge.svg?branch=v3.x&service=github)](https://coveralls.io/github/iamthechad/grails3-recaptcha?branch=v3.x)
 [![Stories in Ready](https://badge.waffle.io/iamthechad/grails3-recaptcha.png?label=ready&title=Ready)](http://waffle.io/iamthechad/grails3-recaptcha)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![Badges](http://img.shields.io/:badges-5/5-ff6799.svg)](https://github.com/badges/badgerbadgerbadger)
