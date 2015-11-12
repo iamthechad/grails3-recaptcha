@@ -38,8 +38,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-![Target Branch](https://img.shields.io/badge/target%20branch-version3__1__0-green.svg?style=flat-square)
-
 # Introduction
 
 This plugin is designed to make using the ReCaptcha service within Grails 3 easy. In order to use this plugin, you must have a ReCaptcha account, available from [http://www.google.com/recaptcha](http://www.google.com/recaptcha).
@@ -280,17 +278,28 @@ The `postText` parameter represents the response from the ReCaptcha server. Here
 
 # Contributing
 
-![Target Branch](https://img.shields.io/badge/target%20branch-version3__1__0-green.svg?style=flat-square)
+* For simplicity's sake, please open an issue first even if you intend to submit code. You can reference the issue from the pull request.
+* Opening an issue begins a conversation. Many of the particulars can be worked out before a PR is even submitted.
+    
+    
+Contributions are welcome, but there are some guidelines that will make everything easier.
+   
+ * **Be clear** about what problem is occurring and how someone can recreate that problem or why your feature will help.
+ * **It’s best to test.** Run your changes against any existing tests if they exist and create new ones when needed.
+ * **Contribute in the style of the project** to the best of your abilities.
+ * **How does this change help others?** Most likely the answer to this question is the same way the change helped you.
+ * **Why would the project maintain this code for you?** What benefit does the project get from your contribution?
+ 
+ 
+Some invaluable guides regarding contributions:
 
-Contributions are welcome, but there a couple of guidelines that will make everything easier.
-
-## Before Submission
-
-* Make sure that all unit tests pass before submitting a pull request.
+* https://guides.github.com/activities/contributing-to-open-source/#contributing:
+* https://contribute.jquery.org/open-source/
+* http://www.go.cd/contribute/contribution-guide.html
 
 ## When Submitting
 
-* Be sure to submit pull requests against the current "target branch". This will ensure that changes are applied to the correct version.
+* Be sure to submit pull requests against the appropriate branch. **Do not submit requests against `master`. They will be rejected.**
 * Make sure that commits have descriptive text that clearly explains the change. (See http://chris.beams.io/posts/git-commit/ for tips on writing good commit messages.)
 * Reference appropriate issues or pull requests if needed. (Use `refs XXX` instead of `fixes XXX` or `closes XXX`)
 
