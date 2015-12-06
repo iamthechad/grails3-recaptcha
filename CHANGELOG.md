@@ -1,19 +1,38 @@
 # Change Log
 
-## [v3.0.0](https://github.com/iamthechad/grails3-recaptcha/tree/v3.0.0) (2015-08-16)
+## [Unreleased](https://github.com/iamthechad/grails3-recaptcha/tree/v3.x)
 
+[Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.0.1...v3.x)
+
+
+## [v3.0.1](https://github.com/iamthechad/grails3-recaptcha/tree/v3.0.1) (2015-12-06)
+[Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.0.0...v3.0.1)
+
+**Implemented enhancements:**
+
+- Enhance contribution guidelines [\#15](https://github.com/iamthechad/grails3-recaptcha/issues/15)
+- Remove Mailhide support [\#9](https://github.com/iamthechad/grails3-recaptcha/issues/9)
+- Support size attribute in render parameters [\#8](https://github.com/iamthechad/grails3-recaptcha/issues/8)
+- Use REST Client [\#6](https://github.com/iamthechad/grails3-recaptcha/issues/6)
+
+**Fixed bugs:**
+
+- Possible NPE if parameter missing [\#16](https://github.com/iamthechad/grails3-recaptcha/issues/16)
+- Language is not supported in render parameters [\#7](https://github.com/iamthechad/grails3-recaptcha/issues/7)
+- ClassNotFoundException thrown if no config exists [\#5](https://github.com/iamthechad/grails3-recaptcha/issues/5)
+
+**Merged pull requests:**
+
+- Update application.yml [\#12](https://github.com/iamthechad/grails3-recaptcha/pull/12) ([Schlogen](https://github.com/Schlogen))
+
+## [v3.0.0](https://github.com/iamthechad/grails3-recaptcha/tree/v3.0.0) (2015-08-16)
 [Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.0.0RC1...v3.0.0)
 
 **Fixed bugs:**
 
 - Language attribute not working for explicit captcha [\#4](https://github.com/iamthechad/grails3-recaptcha/issues/4)
 
-**Merged pull requests:**
-
-- move codec into package [\#3](https://github.com/iamthechad/grails3-recaptcha/pull/3) ([jeffbrown](https://github.com/jeffbrown))
-
 ## [v3.0.0RC1](https://github.com/iamthechad/grails3-recaptcha/tree/v3.0.0RC1) (2015-08-02)
-
 **Implemented enhancements:**
 
 - Support Grails 3 [\#1](https://github.com/iamthechad/grails3-recaptcha/issues/1)
