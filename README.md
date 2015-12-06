@@ -45,7 +45,7 @@ This plugin is designed to make using the ReCaptcha service within Grails 3 easy
 
 Add the following to your `build.gradle`
 
-    compile "org.grails.plugins:recaptcha:3.1.0"
+    compile "org.grails.plugins:recaptcha:3.0.1"
     
 ## Configuration
 Add the following to your application's `application.yml` file:
