@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/iamthechad/grails3-recaptcha.svg?branch=v3.0.1)](https://travis-ci.org/iamthechad/grails3-recaptcha)
-[![Coverage Status](https://coveralls.io/repos/iamthechad/grails3-recaptcha/badge.svg?branch=v3.0.1&service=github)](https://coveralls.io/github/iamthechad/grails3-recaptcha?branch=v3.0.1)
+[![Build Status](https://travis-ci.org/iamthechad/grails3-recaptcha.svg?branch=v3.x)](https://travis-ci.org/iamthechad/grails3-recaptcha)
+[![Coverage Status](https://coveralls.io/repos/iamthechad/grails3-recaptcha/badge.svg?branch=v3.x&service=github)](https://coveralls.io/github/iamthechad/grails3-recaptcha?branch=v3.x)
 [![Stories in Ready](https://badge.waffle.io/iamthechad/grails3-recaptcha.png?label=ready&title=Ready)](http://waffle.io/iamthechad/grails3-recaptcha)
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![Badges](http://img.shields.io/:badges-5/5-ff6799.svg)](https://github.com/badges/badgerbadgerbadger)
@@ -45,7 +45,7 @@ This plugin is designed to make using the ReCaptcha service within Grails 3 easy
 
 Add the following to your `build.gradle`
 
-    compile "org.grails.plugins:recaptcha:3.0.1"
+    compile "org.grails.plugins:recaptcha:3.X"
     
 ## Configuration
 Add the following to your application's `application.yml` file:

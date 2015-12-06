@@ -18,7 +18,7 @@ plugins {
     id 'net.saliman.cobertura' version '2.2.7'
 }
 
-version "3.0.1"
+version "3.X"
 group "org.grails.plugins"
 
 apply plugin: 'maven-publish'
