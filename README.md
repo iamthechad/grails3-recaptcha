@@ -32,7 +32,6 @@
     - [Verify User Input](#verify-user-input)
     - [Testing](#testing)
 - [Contributing](#contributing)
-  - [Before Submission](#before-submission)
   - [When Submitting](#when-submitting)
 - [Suggestions or Comments](#suggestions-or-comments)
 
