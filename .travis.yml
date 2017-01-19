@@ -1,18 +1,31 @@
-sudo: false
-cache:
-  directories:
-  - $HOME/.gradle/wrapper
 language: groovy
-env:
-  global:
-  - TERM=dumb
+
 jdk:
   - oraclejdk8
   - oraclejdk7
   - openjdk7
-script: ./gradlew check --info --refresh-dependencies -Dgrails.env=test
+
+sudo: false
+
+cache:
+  directories:
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper
+  - $HOME/.m2/
+
+before_cache:
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+env:
+  global:
+  - TERM=dumb
+
+script: ./gradlew clean assemble check --info --refresh-dependencies -Dgrails.env=test
+
 after_success:
 - ./gradlew cobertura coveralls
+
 notifications:
   slack:
     secure: m7tLX+4nHW9/GAw7htMJOvDCPu847ETA2NlyTPu4FSEFlR4ZRlSbZHOcrQMmNm/x6BXboO+BpHOUNzQaeLnXvHOTBiJFHTRuUqefZRHlJeuwNMYE4HPbjokL2QujVrOpTnpdp/LHaTysKOpEqWVkIznZTnJRnx+cHRf90sGkUtQ=
