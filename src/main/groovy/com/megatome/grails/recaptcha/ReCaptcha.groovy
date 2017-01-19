@@ -49,7 +49,7 @@ public class ReCaptcha {
             includeScriptForInstance = Boolean.valueOf(options.includeScript)
         }
 
-        def message = new StringBuffer()
+        StringBuffer message = new StringBuffer()
 
         if (includeScriptForInstance) {
             message << createScriptTag(options)

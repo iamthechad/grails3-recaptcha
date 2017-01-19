@@ -3,6 +3,7 @@ package com.megatome.grails
 import com.megatome.grails.recaptcha.ReCaptcha
 import com.megatome.grails.recaptcha.net.AuthenticatorProxy
 import com.megatome.grails.util.ConfigHelper
+import grails.core.GrailsApplication
 import grails.util.Environment
 
 /**
@@ -22,10 +23,10 @@ import grails.util.Environment
  */
 
 class RecaptchaService {
-    boolean transactional = false
-    def grailsApplication
-    private def recaptchaConfig = null
-    private def recap = null
+    GrailsApplication grailsApplication
+
+    private recaptchaConfig = null
+    private recap = null
 
     /**
      * Gets the ReCaptcha config.
@@ -55,12 +56,12 @@ class RecaptchaService {
         return this.recaptchaConfig
     }
 
-    private def getRecaptchaInstance() {
+    private ReCaptcha getRecaptchaInstance() {
         if (!recap) {
             // Public key, private key, include noscript, include script, proxy config
             def config = getRecaptchaConfig()
             def proxyConfig = config.proxy
-            def proxy = new AuthenticatorProxy(
+            AuthenticatorProxy proxy = new AuthenticatorProxy(
                     server: proxyConfig.containsKey('server') ? proxyConfig.server : null,
                     port: proxyConfig.containsKey('port') ? Integer.parseInt(proxyConfig.port) : 80,
                     username: proxyConfig.containsKey('username') ? proxyConfig.username : null,
@@ -76,7 +77,7 @@ class RecaptchaService {
         recap
     }
 
-    private boolean safeGetConfigValue(def value, def defaultValue) {
+    private boolean safeGetConfigValue(String value, def defaultValue) {
         def config = getRecaptchaConfig()
         if (config.containsKey(value)) {
             return ConfigHelper.booleanValue(config[value])
@@ -94,7 +95,7 @@ class RecaptchaService {
      *
      * @return HTML code, suitable for embedding into a webpage.
      */
-    def createCaptcha(props) {
+    String createCaptcha(Map props) {
         return getRecaptchaInstance().createRecaptchaHtml(props)
     }
 
@@ -105,7 +106,7 @@ class RecaptchaService {
      * @param props Options for rendering; <code>lang</code>, and <code>loadCallback</code> are currently supported by recaptcha.
      * @return HTML code, suitable for embedding into a webpage.
      */
-    def createCaptchaExplicit(props) {
+    String createCaptchaExplicit(Map props) {
         return getRecaptchaInstance().createRecaptchaExplicitHtml(props)
     }
 
@@ -114,7 +115,7 @@ class RecaptchaService {
      * @param props Options for rendering; <code>theme</code>, <code>type</code>, <code>tabindex</code>, <code>callback</code>, <code>expired-callback</code> are currently supported
      * @return
      */
-    def createRenderParameters(props) {
+    String createRenderParameters(Map props) {
         return getRecaptchaInstance().createRenderParameters(props)
     }
 
@@ -126,7 +127,7 @@ class RecaptchaService {
      *
      * @return HTML code, suitable for embedding into a webpage.
      */
-    def createScriptEntry(props) {
+    String createScriptEntry(Map props) {
         return getRecaptchaInstance().createScriptTag(props)
     }
 
@@ -139,20 +140,20 @@ class RecaptchaService {
      *
      * @return True if the supplied answer is correct, false otherwise. Returns true if ReCaptcha support is disabled.
      */
-    def verifyAnswer(session, remoteAddress, params) {
+    boolean verifyAnswer(session, remoteAddress, params) {
         if (!isEnabled()) {
             return true
         }
 
         def success = getRecaptchaInstance().checkAnswer(remoteAddress, params["g-recaptcha-response"]?.trim())
-        session["recaptcha_error"] = success ? null : true
+        session["recaptcha_error"] = success ? false : true
         return success
     }
 
     /**
      * Get a value indicating if the ReCaptcha plugin should be enabled.
      */
-    def isEnabled() {
+    boolean isEnabled() {
         return safeGetConfigValue('enabled', true)
     }
 
@@ -161,7 +162,7 @@ class RecaptchaService {
      *
      * @param session The current session
      */
-    def validationFailed(session) {
+    boolean validationFailed(session) {
         return (session["recaptcha_error"] != null)
     }
 
@@ -171,7 +172,7 @@ class RecaptchaService {
      *
      * @param session The current session.
      */
-    def cleanUp(session) {
+    void cleanUp(session) {
         session["recaptcha_error"] = null
     }
 }
