@@ -21,7 +21,7 @@ env:
   global:
   - TERM=dumb
 
-script: ./gradlew clean assemble check --info --refresh-dependencies -Dgrails.env=test
+script: ./gradlew clean assemble check --stacktrace -Dgrails.env=test
 
 after_success:
 - ./gradlew cobertura coveralls
