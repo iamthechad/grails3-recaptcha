@@ -4,7 +4,7 @@ import grails.plugins.rest.client.RestBuilder
 import org.apache.commons.logging.LogFactory
 
 /**
- * Copyright 2010-2015 Megatome Technologies
+ * Copyright 2010-2017 Megatome Technologies
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
