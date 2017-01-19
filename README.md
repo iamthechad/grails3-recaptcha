@@ -32,7 +32,6 @@
     - [Verify User Input](#verify-user-input)
     - [Testing](#testing)
 - [Contributing](#contributing)
-  - [When Submitting](#when-submitting)
 - [Suggestions or Comments](#suggestions-or-comments)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -80,7 +79,7 @@ The configuration values are pretty self-explanatory, and match with values used
 
 ### Proxy Server Configuration
 
-If your server needs to connect through a proxy to the ReCaptcha service, add the following to the ReCapctcha configuration. **These properties are not created by the quickstart script. They must be added manually.**
+If your server needs to connect through a proxy to the ReCaptcha service, add the following to the ReCaptcha configuration.
 
     recaptcha:
     	proxy:
