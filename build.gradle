@@ -1,7 +1,4 @@
 buildscript {
-    ext {
-        grailsVersion = project.grailsVersion
-    }
     repositories {
         mavenLocal()
         maven { url "https://repo.grails.org/grails/core" }
@@ -9,33 +6,27 @@ buildscript {
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath "net.saliman:gradle-cobertura-plugin:2.4.0"
     }
 }
 
 plugins {
-    id "io.spring.dependency-management" version "0.4.0.RELEASE"
-    id "com.jfrog.bintray" version "1.1"
-    id 'net.saliman.cobertura' version '2.2.7'
+    id 'com.github.kt3k.coveralls' version '2.7.1'
 }
+
 
 version "3.X"
 group "org.grails.plugins"
 
-apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: "spring-boot"
 apply plugin: "org.grails.grails-plugin"
+apply plugin:"org.grails.grails-plugin-publish"
 apply plugin: "org.grails.grails-gsp"
 apply plugin: 'com.github.kt3k.coveralls'
-// Used for publishing to central repository, remove if not needed
-apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/grailsCentralPublishing.gradle'
-apply from:'https://raw.githubusercontent.com/grails/grails-profile-repository/master/profiles/plugin/templates/bintrayPublishing.gradle'
+apply plugin: "net.saliman.cobertura"
 
-ext {
-    grailsVersion = project.grailsVersion
-    gradleWrapperVersion = project.gradleWrapperVersion
-}
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -61,11 +52,14 @@ dependencies {
     provided "org.springframework.boot:spring-boot-autoconfigure"
     provided "org.springframework.boot:spring-boot-starter-tomcat"
 
-    provided "org.grails:grails-web-boot"
-    provided "org.grails:grails-dependencies"
-    provided 'javax.servlet:javax.servlet-api:3.1.0'
+    compile "org.grails:grails-core"
+    compile "org.grails:grails-web-boot"
+    compile "org.grails:grails-dependencies"
+    profile "org.grails.profiles:web-plugin"
+    provided "org.grails:grails-plugin-services"
+    provided "org.grails:grails-plugin-domain-class"
 
-    compile "org.grails:grails-datastore-rest-client:4.0.0.RELEASE"
+    compile "org.grails:grails-datastore-rest-client:6.0.5.RELEASE"
 
     testCompile "org.grails:grails-plugin-testing"
 
@@ -79,7 +73,7 @@ task wrapper(type: Wrapper) {
 bintray {
     user = project.hasProperty('bintray_user') ? project.bintray_user : System.getenv('bintray_user')
     key = project.hasProperty('bintray_key') ? project.bintray_key : System.getenv('bintray_key')
-    publications = ["maven"]
+
     publish = true
     pkg {
         userOrg = ''

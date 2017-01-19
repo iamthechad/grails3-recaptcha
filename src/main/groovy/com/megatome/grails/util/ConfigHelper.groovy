@@ -1,5 +1,7 @@
 package com.megatome.grails.util
 
+import groovy.transform.CompileStatic
+
 /**
  * Copyright 2010-2015 Megatome Technologies
  *
@@ -18,9 +20,11 @@ package com.megatome.grails.util
  * Based on information from http://jira.codehaus.org/browse/GRAILS-6515
  */
 
+@CompileStatic
 class ConfigHelper {
-    // See http://jira.codehaus.org/browse/GRAILS-6515
-    public static booleanValue(def value) {
+
+    //See http://jira.codehaus.org/browse/GRAILS-6515
+    public static boolean booleanValue(def value) {
         if (null == value) {
             return false
         }
@@ -29,7 +33,7 @@ class ConfigHelper {
             // because 'true.toBoolean() == false' !!!
             return value
         } else {
-            return value.toBoolean()
+            return ((String)value).toBoolean()
         }
     }
 }
