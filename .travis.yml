@@ -1,16 +1,18 @@
 sudo: false
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
   directories:
-  - $HOME/.gradle/wrapper
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.m2/repositories/
 language: groovy
 env:
   global:
   - TERM=dumb
 jdk:
   - oraclejdk8
-  - oraclejdk7
-  - openjdk7
-script: ./gradlew check --info --refresh-dependencies -Dgrails.env=test
+script: ./gradlew check -Dgrails.env=test
 after_success:
 - ./gradlew cobertura coveralls
 notifications:
