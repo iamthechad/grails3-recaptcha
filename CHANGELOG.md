@@ -1,9 +1,20 @@
 # Change Log
 
-## [Unreleased](https://github.com/iamthechad/grails3-recaptcha/tree/v3.x)
+## [Unreleased](https://github.com/iamthechad/grails3-recaptcha/tree/HEAD)
 
-[Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.0.1...v3.x)
+[Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.1.0...HEAD)
 
+## [v3.1.0](https://github.com/iamthechad/grails3-recaptcha/tree/v3.1.0) (2017-02-12)
+[Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.0.1...v3.1.0)
+
+**Implemented enhancements:**
+
+- Improve Travis configuration [\#20](https://github.com/iamthechad/grails3-recaptcha/issues/20)
+- Upgrade to latest Grails \(3.2.4\) [\#19](https://github.com/iamthechad/grails3-recaptcha/issues/19)
+
+**Closed issues:**
+
+- unable to compile when using recaptcha plugin [\#17](https://github.com/iamthechad/grails3-recaptcha/issues/17)
 
 ## [v3.0.1](https://github.com/iamthechad/grails3-recaptcha/tree/v3.0.1) (2015-12-06)
 [Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.0.0...v3.0.1)
@@ -23,7 +34,7 @@
 
 **Merged pull requests:**
 
-- Update application.yml [\#12](https://github.com/iamthechad/grails3-recaptcha/pull/12) ([Schlogen](https://github.com/Schlogen))
+- Update application.yml [\#12](https://github.com/iamthechad/grails3-recaptcha/pull/12) ([jameskleeh](https://github.com/jameskleeh))
 
 ## [v3.0.0](https://github.com/iamthechad/grails3-recaptcha/tree/v3.0.0) (2015-08-16)
 [Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.0.0RC1...v3.0.0)
