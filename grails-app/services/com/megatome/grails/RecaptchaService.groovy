@@ -42,7 +42,7 @@ class RecaptchaService {
                     def cfg = new ConfigSlurper(Environment.current.name).parse(rc)
                     this.recaptchaConfig = cfg.recaptcha
                 } catch (ClassNotFoundException e) {
-                    throw new IllegalArgumentException("ReCaptcha configuration not specified. Run the quickstart script.")
+                    throw new IllegalArgumentException("ReCaptcha configuration not specified.")
                 }
             }
             if (!this.recaptchaConfig.publicKey || this.recaptchaConfig.publicKey.length() == 0) {
