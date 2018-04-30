@@ -20,10 +20,9 @@ Some invaluable guides regarding contributions:
 
 ## When Submitting
 
-* Be sure to submit pull requests against the appropriate branch. **Do not submit requests against `master`. They will be rejected.**
 * Follow good practices for Git commit messages (See http://chris.beams.io/posts/git-commit/ for tips on writing good commit messages.)
     * Use the present tense ("Add feature" not "Added feature")
     * Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
     * Limit the first line to 72 characters or less
     * Make sure that commits have descriptive text that clearly explains the change 
-* Reference appropriate issues or pull requests if needed. (Use `refs XXX` instead of `fixes XXX` or `closes XXX`)
+* Reference appropriate issues or pull requests if needed.
