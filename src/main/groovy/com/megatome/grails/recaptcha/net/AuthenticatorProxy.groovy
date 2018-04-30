@@ -23,7 +23,7 @@ class AuthenticatorProxy {
     int port = -1
     String username = null
     String password = null
-    private def proxy = null
+    private Proxy proxy = null
 
     public AuthenticatorProxy(Map map) {
         map.each { k,v -> if (this.hasProperty(k)) { this."$k" = v} }
