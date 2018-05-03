@@ -83,4 +83,34 @@ class PostTests extends Specification {
         then:
         post.response == null
     }
+
+    def "Test with overridden timeouts"() {
+        when:
+        def post = new Post(url: "http://www.google.com", connectTimeout: 1234, readTimeout: 5678)
+
+        then:
+        post.url == "http://www.google.com"
+        post.rest.restTemplate.requestFactory?.connectTimeout == 1234
+        post.rest.restTemplate.requestFactory?.readTimeout == 5678
+    }
+
+    def "Test with overridden connect timeout"() {
+        when:
+        def post = new Post(url: "http://www.google.com", connectTimeout: 1234)
+
+        then:
+        post.url == "http://www.google.com"
+        post.rest.restTemplate.requestFactory?.connectTimeout == 1234
+        post.rest.restTemplate.requestFactory?.readTimeout == 1000
+    }
+
+    def "Test with overridden read timeout"() {
+        when:
+        def post = new Post(url: "http://www.google.com", readTimeout: 5678)
+
+        then:
+        post.url == "http://www.google.com"
+        post.rest.restTemplate.requestFactory?.connectTimeout == 10000
+        post.rest.restTemplate.requestFactory?.readTimeout == 5678
+    }
 }

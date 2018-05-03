@@ -23,6 +23,8 @@ public class Post {
     private static final log = LogFactory.getLog(this)
     String url
     QueryParams queryParams = new QueryParams(null)
+    int connectTimeout = 10000
+    int readTimeout = 1000
     AuthenticatorProxy proxy = null
     RestBuilder rest = null
 
@@ -30,9 +32,9 @@ public class Post {
         options.each { k,v -> if (this.hasProperty(k)) { this."$k" = v} }
         if (null == rest) {
             if (proxy?.isConfigured()) {
-                rest = new RestBuilder(connectTimeout: 10000, readTimeout: 1000, proxy: proxy.proxy)
+                rest = new RestBuilder(connectTimeout: connectTimeout, readTimeout: readTimeout, proxy: proxy.proxy)
             } else {
-                rest = new RestBuilder(connectTimeout: 10000, readTimeout: 1000)
+                rest = new RestBuilder(connectTimeout: connectTimeout, readTimeout: readTimeout)
             }
         }
     }

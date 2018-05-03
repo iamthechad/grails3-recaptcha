@@ -209,6 +209,10 @@ class ReCaptchaTests extends Specification {
         stub.demand.setUrl() {}
         stub.demand.setProxy() {}
         stub.demand.getQueryParams(3..3) { new QueryParams(null) }
+        stub.demand.setConnectTimeout() {}
+        stub.demand.getConnectTimeout() { 10000 }
+        stub.demand.setReadTimeout() {}
+        stub.demand.getReadTimeout() { 1000 }
         stub.demand.getResponse() { postText == null ? null : new JsonSlurper().parseText(postText) }
 
         stub.use {
