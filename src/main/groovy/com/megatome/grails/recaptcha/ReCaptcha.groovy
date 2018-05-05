@@ -34,6 +34,8 @@ public class ReCaptcha {
     Boolean includeNoScript = false
     Boolean includeScript = true
 
+    def timeoutConfig
+
     AuthenticatorProxy proxy = null
 
     /**
@@ -172,6 +174,9 @@ public class ReCaptcha {
         post.queryParams.add("secret", privateKey)
         post.queryParams.add("response", response)
         post.queryParams.add("remoteip", remoteAddr)
+
+        post.connectTimeout = timeoutConfig?.connectTimeout ?: post.connectTimeout
+        post.readTimeout = timeoutConfig?.readTimeout ?: post.readTimeout
 
         def responseObject = post.response
 

@@ -16,6 +16,7 @@
 - [Usage - ReCaptcha](#usage---recaptcha)
   - [Edit the Configuration](#edit-the-configuration)
     - [Proxy Server Configuration](#proxy-server-configuration)
+    - [Timeout Configuration](#timeout-configuration)
   - [Use the Tag Library](#use-the-tag-library)
     - [`<recaptcha:ifEnabled>`](#recaptchaifenabled)
     - [`<recaptcha:ifDisabled>`](#recaptchaifdisabled)
@@ -90,6 +91,19 @@ If your server needs to connect through a proxy to the ReCaptcha service, add th
         	password: "" // Optional password if proxy requires authentication
 
 Only the `server` property is required. The `port` will default to `80` if not specified. The `username` and `password` properties need to be specified only when the proxy requires authentication.
+
+Like other configurations, this can be placed at the top-level `recaptcha` entry, or it can be specified on a per-environment basis.
+
+### Timeout Configuration
+
+If there are issues connecting to Google for verifying the captcha, some of the network timeouts can be changed.
+
+    recaptcha:
+        timeoutConfig:
+            connectTimeout: 10000 // Timeout for making the network connection in millis. Defaults to 10000
+            readTimeout: 1000     // Timeout for waiting on the network response in millis. Defaults to 1000
+
+`connectTimeout` and `readTimeout` can be specified together or independently of each other.
 
 Like other configurations, this can be placed at the top-level `recaptcha` entry, or it can be specified on a per-environment basis.
 
