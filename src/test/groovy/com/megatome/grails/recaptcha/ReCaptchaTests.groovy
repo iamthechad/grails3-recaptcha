@@ -205,14 +205,10 @@ class ReCaptchaTests extends Specification {
 
     private void buildAndCheckAnswer(String postText, boolean expectedValid) {
         def stub = new StubFor(Post.class)
-        stub.demand.hasProperty(3..3) { true }
+        stub.demand.hasProperty(5..5) { true }
         stub.demand.setUrl() {}
         stub.demand.setProxy() {}
         stub.demand.getQueryParams(3..3) { new QueryParams(null) }
-        stub.demand.setConnectTimeout() {}
-        stub.demand.getConnectTimeout() { 10000 }
-        stub.demand.setReadTimeout() {}
-        stub.demand.getReadTimeout() { 1000 }
         stub.demand.getResponse() { postText == null ? null : new JsonSlurper().parseText(postText) }
 
         stub.use {
