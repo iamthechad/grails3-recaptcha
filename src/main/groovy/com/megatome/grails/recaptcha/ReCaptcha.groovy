@@ -170,13 +170,10 @@ public class ReCaptcha {
      * @return
      */
     public boolean checkAnswer(String remoteAddr, String response) {
-        def post = new Post(url: BASE_URL + VERIFY_URL, proxy: proxy)
+        def post = new Post(url: BASE_URL + VERIFY_URL, proxy: proxy, connectTimeout: timeoutConfig?.connectTimeout, readTimeout: timeoutConfig?.readTimeout)
         post.queryParams.add("secret", privateKey)
         post.queryParams.add("response", response)
         post.queryParams.add("remoteip", remoteAddr)
-
-        post.connectTimeout = timeoutConfig?.connectTimeout ?: post.connectTimeout
-        post.readTimeout = timeoutConfig?.readTimeout ?: post.readTimeout
 
         def responseObject = post.response
 

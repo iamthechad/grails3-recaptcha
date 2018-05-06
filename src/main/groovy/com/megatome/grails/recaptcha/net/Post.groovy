@@ -29,7 +29,7 @@ public class Post {
     RestBuilder rest = null
 
     public Post(Map options) {
-        options.each { k,v -> if (this.hasProperty(k)) { this."$k" = v} }
+        options.each { k,v -> if (this.hasProperty(k) && v) { this."$k" = v} }
         if (null == rest) {
             if (proxy?.isConfigured()) {
                 rest = new RestBuilder(connectTimeout: connectTimeout, readTimeout: readTimeout, proxy: proxy.proxy)
