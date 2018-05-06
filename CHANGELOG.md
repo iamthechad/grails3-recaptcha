@@ -1,8 +1,20 @@
 # Change Log
 
-## [Unreleased](https://github.com/iamthechad/grails3-recaptcha/tree/HEAD)
+## [v3.2.0](https://github.com/iamthechad/grails3-recaptcha/tree/v3.2.0) (2018-05-06)
+[Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.1.0...v3.2.0)
 
-[Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.1.0...HEAD)
+**Implemented enhancements:**
+
+- Move development back to main branch [\#24](https://github.com/iamthechad/grails3-recaptcha/issues/24)
+- Make restbuilder timeouts configurable [\#23](https://github.com/iamthechad/grails3-recaptcha/issues/23)
+- Investigate using static types vs dynamic [\#21](https://github.com/iamthechad/grails3-recaptcha/issues/21)
+
+**Merged pull requests:**
+
+- Correctly set timeouts [\#28](https://github.com/iamthechad/grails3-recaptcha/pull/28) ([iamthechad](https://github.com/iamthechad))
+- Support config for network timeouts [\#27](https://github.com/iamthechad/grails3-recaptcha/pull/27) ([iamthechad](https://github.com/iamthechad))
+- Use static types where possible [\#26](https://github.com/iamthechad/grails3-recaptcha/pull/26) ([iamthechad](https://github.com/iamthechad))
+- Move dev back to main [\#25](https://github.com/iamthechad/grails3-recaptcha/pull/25) ([iamthechad](https://github.com/iamthechad))
 
 ## [v3.1.0](https://github.com/iamthechad/grails3-recaptcha/tree/v3.1.0) (2017-02-12)
 [Full Changelog](https://github.com/iamthechad/grails3-recaptcha/compare/v3.0.1...v3.1.0)
