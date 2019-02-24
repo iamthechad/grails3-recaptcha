@@ -47,7 +47,7 @@ This plugin is designed to make using the ReCaptcha service within Grails 3 easy
 
 Add the following to your `build.gradle`
 
-    compile "org.grails.plugins:recaptcha:3.2.0"
+    compile "org.grails.plugins:recaptcha:4.0.0"
     
 ## Configuration
 Add the following to your application's `application.yml` file:
@@ -56,8 +56,7 @@ Add the following to your application's `application.yml` file:
         publicKey: "your public key"
         privateKey: "your private key"
         includeScript: true
-        includeNoScript: true
-        
+
 These configurations can also be placed at environment-specific locations in the configuration:
 
     environments:
@@ -296,6 +295,6 @@ See the [contribution guidelines](./CONTRIBUTING.md).
 
 # Suggestions or Comments
 
-Feel free to submit questions through GitHub or to StackOverflow.
+Feel free to submit questions through GitHub.
 
 Alternatively you can contact me directly - cjohnston at megatome dot com

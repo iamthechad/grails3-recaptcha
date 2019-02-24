@@ -67,7 +67,6 @@ class RecaptchaServiceTests extends Specification {
         setup:
         config.recaptcha.publicKey = "ABC"
         config.recaptcha.privateKey = "123"
-        config.recaptcha.includeNoScript = true
 
         when:
         def response = service.createCaptcha([:])
@@ -75,7 +74,6 @@ class RecaptchaServiceTests extends Specification {
         then:
         response.contains("\"g-recaptcha\"")
         response.contains("data-sitekey=\"ABC\"")
-        response.contains("<noscript>")
 
         when:
         response = service.createCaptcha(theme:"dark", lang:"fr", type:"audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1, includeScript: true)
@@ -83,7 +81,6 @@ class RecaptchaServiceTests extends Specification {
         then:
         response.contains("\"g-recaptcha\"")
         response.contains("data-sitekey=\"ABC\"")
-        response.contains("<noscript>")
         response.contains("data-theme=\"dark\"")
         response.contains("data-type=\"audio\"")
         response.contains("data-size=\"normal\"")
@@ -108,7 +105,6 @@ class RecaptchaServiceTests extends Specification {
         then:
         response.contains("\"g-recaptcha\"")
         response.contains("data-sitekey=\"ABC\"")
-        response.contains("<noscript>")
     }
 
     void "test create explicit captcha"() {
@@ -123,7 +119,6 @@ class RecaptchaServiceTests extends Specification {
         response.contains("loadCB")
         !response.contains("\"g-recaptcha\"")
         !response.contains("data-sitekey=\"ABC\"")
-        response.contains("<noscript>")
     }
 
     void "test create render parameters"() {

@@ -70,7 +70,6 @@ class RecaptchaService {
             recap = new ReCaptcha(
                     publicKey: config.publicKey,
                     privateKey: config.privateKey,
-                    includeNoScript: safeGetConfigValue('includeNoScript', true),
                     includeScript: safeGetConfigValue('includeScript', true),
                     timeoutConfig: config.timeoutConfig,
                     proxy: proxy)

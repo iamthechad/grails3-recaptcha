@@ -23,10 +23,10 @@ import spock.lang.Specification
  */
 
 class ReCaptchaTests extends Specification {
-    private ReCaptcha r;
+    private ReCaptcha r
 
     def setup() {
-        r = new ReCaptcha(privateKey: "testing", publicKey: "testing", includeNoScript: false)
+        r = new ReCaptcha(privateKey: "testing", publicKey: "testing")
     }
 
     def "Create captcha with various script options"() {
@@ -42,12 +42,6 @@ class ReCaptchaTests extends Specification {
 
         then:"Script tag should be emitted as part of the captcha"
         r.createRecaptchaHtml(includeScript: true).contains("<script")
-
-        when:"includeNoScript is true"
-        r.includeNoScript = true
-
-        then:"noscript tag should be emitted as part of the captcha"
-        r.createRecaptchaHtml(null).contains("<noscript>")
     }
 
     def "Create captcha with options"() {
@@ -103,12 +97,6 @@ class ReCaptchaTests extends Specification {
     def "Create explicit captcha"() {
         expect:
         buildAndCheckExplicitHTML(loadCallback: "foo")
-
-        when:
-        r.includeNoScript = true
-
-        then:
-        buildAndCheckExplicitHTML(loadCallback: "foo", true)
     }
 
     def "Create explicit captcha with no callback"() {
@@ -218,7 +206,7 @@ class ReCaptchaTests extends Specification {
         }
     }
 
-    private void buildAndCheckExplicitHTML(Map options, includeNoScript = false) {
+    private void buildAndCheckExplicitHTML(Map options) {
         def expectedLang = null
         if (options.lang) {
             expectedLang = options.lang
@@ -231,8 +219,5 @@ class ReCaptchaTests extends Specification {
             assert !html.contains("hl=")
         }
         assert html.contains("onload=" + options.loadCallback)
-        if (includeNoScript) {
-            assert html.contains("<noscript>")
-        }
     }
 }
