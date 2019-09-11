@@ -23,7 +23,6 @@ import org.grails.config.NavigableMap
  */
 
 class RecaptchaService {
-    boolean transactional = false
     def grailsApplication
     private NavigableMap recaptchaConfig = null
     private ReCaptcha recap = null
