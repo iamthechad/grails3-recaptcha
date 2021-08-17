@@ -5,12 +5,12 @@ buildscript {
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.8.2"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.0.10"
     }
 }
 
 plugins {
-    id 'net.saliman.cobertura' version '2.3.1'
+    id 'net.saliman.cobertura' version '3.0.0'
     id 'com.github.kt3k.coveralls' version '2.7.1'
     id 'com.jfrog.artifactory' version '4.4.0'
 }
@@ -21,7 +21,7 @@ group "org.grails.plugins"
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: "org.grails.grails-plugin"
-apply plugin: "org.grails.grails-plugin-publish"
+apply plugin: "maven-publish"
 apply plugin: "org.grails.grails-gsp"
 apply plugin: "asset-pipeline"
 
@@ -43,10 +43,18 @@ dependencyManagement {
     applyMavenExclusions false
 }
 
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
 dependencies {
     //provided 'javax.servlet:javax.servlet-api:3.1.0'
 
-    compile "org.grails:grails-datastore-rest-client:6.0.5.RELEASE"
+    compile "org.grails:grails-datastore-rest-client:6.1.12.RELEASE"
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
@@ -54,41 +62,44 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-tomcat"
     compile "org.grails:grails-dependencies"
     compile "org.grails:grails-web-boot"
+    compile "org.grails:grails-logging"
+    compile "org.grails:grails-plugin-rest"
+    compile "org.grails:grails-plugin-databinding"
+    compile "org.grails:grails-plugin-i18n"
+    compile "org.grails:grails-plugin-services"
+    compile "org.grails:grails-plugin-url-mappings"
+    compile "org.grails:grails-plugin-interceptors"
     compile "org.grails.plugins:cache"
+    compile "org.grails.plugins:async"
     compile "org.grails.plugins:scaffolding"
+    compile "org.grails.plugins:gsp"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web-plugin"
-    provided "org.grails:grails-plugin-services"
-    provided "org.grails:grails-plugin-domain-class"
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.8.2"
-    testCompile "org.grails:grails-plugin-testing"
-    testCompile "org.grails.plugins:geb"
-    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
+    runtime "com.bertramlabs.plugins:asset-pipeline-grails:3.0.10"
+    testCompile "org.grails:grails-gorm-testing-support"
+    testCompile "org.grails:grails-web-testing-support"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
 }
 
 bootRun {
-    jvmArgs('-Dspring.output.ansi.enabled=always')
+    ignoreExitValue true
+    jvmArgs(
+            '-Dspring.output.ansi.enabled=always',
+            '-noverify',
+            '-XX:TieredStopAtLevel=1',
+            '-Xmx1024m')
+    sourceResources sourceSets.main
+    String springProfilesActive = 'spring.profiles.active'
+    systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 
-/*bintray {
-    user = project.hasProperty('bintray_user') ? project.bintray_user : System.getenv('bintray_user')
-    key = project.hasProperty('bintray_key') ? project.bintray_key : System.getenv('bintray_key')
-    publications = ["maven"]
-    publish = true
-    pkg {
-        userOrg = ''
-        repo = "plugins"
-        name = project.name
-        desc = "Grails 3 ReCaptcha plugin"
-        websiteUrl = "https://github.com/iamthechad/grails3-recaptcha"
-        issueTrackerUrl = "https://github.com/iamthechad/grails3-recaptcha/issues"
-        vcsUrl = "https://github.com/iamthechad/grails3-recaptcha.git"
-        licenses = ["Apache-2.0"]
-        labels = ["recaptcha"]
-        publicDownloadNumbers = true
+tasks.withType(GroovyCompile) {
+    configure(groovyOptions) {
+        forkOptions.jvmArgs = ['-Xmx1024m']
     }
-}*/
+}
+// enable if you wish to package this plugin as a standalone application
+bootJar.enabled = false
 
 artifactory {
     contextUrl = 'http://oss.jfrog.org'
@@ -108,22 +119,6 @@ artifactoryPublish {
     dependsOn sourcesJar, javadocJar
 }
 
-// enable if you wish to package this plugin as a standalone application
-bootRepackage.enabled = false
-grailsPublish {
-    user = bintrayUser
-    key = bintrayKey
-    githubSlug = 'iamthechad/grails3-recaptcha'
-    license {
-        name = 'Apache-2.0'
-    }
-    repo = "plugins"
-    title = "recaptcha"
-    desc = "Grails 3 ReCaptcha plugin"
-    developers = [chadjohnston:"Chad Johnston"]
-    portalUser = project.hasProperty('portal_user') ? project.portal_user : System.getenv('portal_user')
-    portalPassword = project.hasProperty('portal_password') ? project.portal_password : System.getenv('portal_password')
-}
 
 assets {
     packagePlugin = true

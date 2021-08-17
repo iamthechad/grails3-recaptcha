@@ -25,8 +25,8 @@ class AuthenticatorProxy {
     String password = null
     private Proxy proxy = null
 
-    public AuthenticatorProxy(Map map) {
-        map.each { k,v -> if (this.hasProperty(k)) { this."$k" = v} }
+    AuthenticatorProxy(Map map) {
+        map.each { k, v -> if (this.hasProperty(k)) { this."$k" = v } }
         if (server != null && server.length() != 0) {
             proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(server, port))
 
@@ -51,11 +51,11 @@ class AuthenticatorProxy {
         }
     }
 
-    public boolean isConfigured() {
+    boolean isConfigured() {
         return (proxy != null)
     }
 
-    public Proxy getProxy() {
+    Proxy getProxy() {
         return proxy
     }
 }

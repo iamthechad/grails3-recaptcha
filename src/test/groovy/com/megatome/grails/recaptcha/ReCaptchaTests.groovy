@@ -23,7 +23,7 @@ import spock.lang.Specification
  */
 
 class ReCaptchaTests extends Specification {
-    private ReCaptcha r;
+    private ReCaptcha r
 
     def setup() {
         r = new ReCaptcha(privateKey: "testing", publicKey: "testing", includeNoScript: false)
