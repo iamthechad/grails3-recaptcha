@@ -22,7 +22,7 @@ import com.megatome.grails.recaptcha.net.QueryParams
  * Based on recaptcha4j
  */
 
-public class ReCaptcha {
+class ReCaptcha {
     private static final String BASE_URL = "https://www.google.com/recaptcha/api"
     public static final String VERIFY_URL = "/siteverify"
     public static final String JS_URL = BASE_URL + ".js"
@@ -45,7 +45,7 @@ public class ReCaptcha {
      *  The <code>includeScript</code> can also be specified and will override the global configuration setting.
      * @return
      */
-    public String createRecaptchaHtml(Map options) {
+    String createRecaptchaHtml(Map options) {
         def includeScriptForInstance = includeScript
         if (options?.containsKey('includeScript')) {
             includeScriptForInstance = Boolean.valueOf(options.includeScript)
@@ -77,7 +77,7 @@ public class ReCaptcha {
      * @param options Options for rendering. Only <code>lang</code> and <code>loadCallback</code> are supported here.
      * @return
      */
-    public String createRecaptchaExplicitHtml(Map options) {
+    String createRecaptchaExplicitHtml(Map options) {
         def message = new StringBuffer()
 
         message << createScriptTagExplicit(options)
@@ -94,7 +94,7 @@ public class ReCaptcha {
      * @param options Options for rendering. Supports <code>theme</code>, <code>type</code>, and <code>tabindex</code>.
      * @return
      */
-    public String createRenderParameters(Map options) {
+    String createRenderParameters(Map options) {
         def params = new StringBuffer()
 
         params << "{ 'sitekey': '${publicKey}'"
@@ -113,7 +113,7 @@ public class ReCaptcha {
      * @param options Options for creating the tag. Only <code>lang</code> is supported.
      * @return
      */
-    public static String createScriptTag(Map options) {
+    static String createScriptTag(Map options) {
         def qs = new QueryParams()
         if (options?.lang) {
             qs.add("hl", URLEncoder.encode(options.remove("lang")))
@@ -169,7 +169,7 @@ public class ReCaptcha {
      * @param response The response from the reCaptcha form, this is usually request.getParameter("g-recaptcha-response") in your code.
      * @return
      */
-    public boolean checkAnswer(String remoteAddr, String response) {
+    boolean checkAnswer(String remoteAddr, String response) {
         def post = new Post(url: BASE_URL + VERIFY_URL, proxy: proxy, connectTimeout: timeoutConfig?.connectTimeout, readTimeout: timeoutConfig?.readTimeout)
         post.queryParams.add("secret", privateKey)
         post.queryParams.add("response", response)

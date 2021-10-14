@@ -15,18 +15,14 @@ package com.megatome.grails
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import com.megatome.grails.recaptcha.ReCaptcha
-import grails.test.mixin.TestFor
-import grails.test.runtime.FreshRuntime
+import grails.testing.services.ServiceUnitTest
 import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
 import groovy.mock.interceptor.StubFor
 import spock.lang.Specification
 
-@FreshRuntime
-@TestFor(RecaptchaService)
-class RecaptchaServiceTests extends Specification {
+class RecaptchaServiceTests extends Specification implements ServiceUnitTest<RecaptchaService> {
 
     void "load with no config"() {
         when:
@@ -78,7 +74,7 @@ class RecaptchaServiceTests extends Specification {
         response.contains("<noscript>")
 
         when:
-        response = service.createCaptcha(theme:"dark", lang:"fr", type:"audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1, includeScript: true)
+        response = service.createCaptcha(theme: "dark", lang: "fr", type: "audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1, includeScript: true)
 
         then:
         response.contains("\"g-recaptcha\"")
@@ -141,7 +137,7 @@ class RecaptchaServiceTests extends Specification {
         json.sitekey == "ABC"
 
         when:
-        response = service.createRenderParameters(theme:"dark", type:"audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1)
+        response = service.createRenderParameters(theme: "dark", type: "audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1)
         json = slurper.parseText(response)
 
         then:
@@ -153,7 +149,7 @@ class RecaptchaServiceTests extends Specification {
         json.tabindex == "1"
 
         when:
-        response = service.createRenderParameters(theme:"dark", lang:"fr", foo:"bar")
+        response = service.createRenderParameters(theme: "dark", lang: "fr", foo: "bar")
         json = slurper.parseText(response)
 
         then:
@@ -176,13 +172,13 @@ class RecaptchaServiceTests extends Specification {
         !response.contains("hl=")
 
         when:
-        response = service.createScriptEntry(lang:"fr")
+        response = service.createScriptEntry(lang: "fr")
 
         then:
         response.contains("hl=fr")
 
         when:
-        response = service.createScriptEntry(lang:"fr", foo:"bar")
+        response = service.createScriptEntry(lang: "fr", foo: "bar")
 
         then:
         response.contains("hl=fr")

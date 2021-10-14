@@ -19,7 +19,7 @@ import org.apache.commons.logging.LogFactory
  * limitations under the License.
  */
 
-public class Post {
+class Post {
     private static final log = LogFactory.getLog(this)
     String url
     QueryParams queryParams = new QueryParams(null)
@@ -28,8 +28,8 @@ public class Post {
     AuthenticatorProxy proxy = null
     RestBuilder rest = null
 
-    public Post(Map options) {
-        options.each { k,v -> if (this.hasProperty(k) && v) { this."$k" = v} }
+    Post(Map options) {
+        options.each { k, v -> if (this.hasProperty(k) && v) { this."$k" = v } }
         if (null == rest) {
             if (proxy?.isConfigured()) {
                 rest = new RestBuilder(connectTimeout: connectTimeout, readTimeout: readTimeout, proxy: proxy.proxy)
