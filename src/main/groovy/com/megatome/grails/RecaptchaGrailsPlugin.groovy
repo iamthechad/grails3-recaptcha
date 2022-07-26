@@ -4,7 +4,7 @@ import grails.plugins.Plugin
 
 class RecaptchaGrailsPlugin extends Plugin {
 
-    def grailsVersion = "4.0.0 > *"
+    def grailsVersion = "5.0.0 > *"
     def pluginExcludes = [
             "grails-app/views/error.gsp"
     ]

@@ -1,7 +1,11 @@
 package com.megatome.grails.recaptcha.net
 
-import grails.plugins.rest.client.RestBuilder
 import org.apache.commons.logging.LogFactory
+import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.http.client.SimpleClientHttpRequestFactory
+import org.springframework.web.client.RestTemplate
+
+import java.time.Duration
 
 /**
  * Copyright 2010-2018 Megatome Technologies
@@ -26,24 +30,30 @@ class Post {
     int connectTimeout = 10000
     int readTimeout = 1000
     AuthenticatorProxy proxy = null
-    RestBuilder rest = null
+    RestTemplateBuilder restTemplateBuilder = null
+    RestTemplate restTemplate = null
 
     Post(Map options) {
         options.each { k, v -> if (this.hasProperty(k) && v) { this."$k" = v } }
-        if (null == rest) {
+        if (!restTemplateBuilder) {
+            restTemplateBuilder = new RestTemplateBuilder()
+        }
+        if (!restTemplate) {
+            SimpleClientHttpRequestFactory requestFactory = (SimpleClientHttpRequestFactory) restTemplateBuilder.requestFactory(SimpleClientHttpRequestFactory).buildRequestFactory()
             if (proxy?.isConfigured()) {
-                rest = new RestBuilder(connectTimeout: connectTimeout, readTimeout: readTimeout, proxy: proxy.proxy)
-            } else {
-                rest = new RestBuilder(connectTimeout: connectTimeout, readTimeout: readTimeout)
+                requestFactory.proxy = proxy.proxy
             }
+            restTemplate = restTemplateBuilder
+                    .requestFactory({ requestFactory })
+                    .setConnectTimeout(Duration.ofMillis(connectTimeout))
+                    .setReadTimeout(Duration.ofMillis(readTimeout))
+                    .build()
         }
     }
 
     def getResponse() {
         try {
-            def queryUrl = url + "?" + queryParams.toRestClientString()
-            def resp = rest.post(queryUrl, queryParams.params)
-            return resp.json
+            return restTemplate.postForObject(url, null, Map, queryParams.params)
         } catch (Exception e) {
             def message = "Failed to connect to ${url}."
             if (proxy?.isConfigured()) {

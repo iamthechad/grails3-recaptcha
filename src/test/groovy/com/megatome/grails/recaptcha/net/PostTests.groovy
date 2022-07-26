@@ -1,6 +1,6 @@
 package com.megatome.grails.recaptcha.net
 
-import grails.plugins.rest.client.RestBuilder
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.test.web.client.MockRestServiceServer
@@ -25,14 +25,17 @@ import spock.lang.Specification
  */
 
 class PostTests extends Specification {
+
+    RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder()
+
     def "Test basic POST"(){
         given:"A rest client instance"
-        def rest = new RestBuilder()
-        final mockServer = MockRestServiceServer.createServer(rest.restTemplate)
+        def restTemplate = restTemplateBuilder.build()
+        final mockServer = MockRestServiceServer.createServer(restTemplate)
         mockServer.expect(MockRestRequestMatchers.requestTo("http://www.google.com"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
                 .andRespond(MockRestResponseCreators.withSuccess('{"success":"true"}', MediaType.APPLICATION_JSON))
-        def post = new Post(url: "http://www.google.com", rest: rest)
+        def post = new Post(url: "http://www.google.com", restTemplate: restTemplate)
 
         when:
         def resp = post.response
@@ -46,7 +49,7 @@ class PostTests extends Specification {
         when:
         def authProxy = new AuthenticatorProxy(server: "localhost", port: 8080)
         def post = new Post(url: "http://www.google.com", proxy: authProxy)
-        def proxyAddress = post.rest.restTemplate.requestFactory?.@proxy?.address()
+        def proxyAddress = post.restTemplate.requestFactory?.@proxy?.address()
 
         then:"The proxy settings are correct"
         proxyAddress != null
@@ -90,8 +93,8 @@ class PostTests extends Specification {
 
         then:
         post.url == "http://www.google.com"
-        post.rest.restTemplate.requestFactory?.connectTimeout == 1234
-        post.rest.restTemplate.requestFactory?.readTimeout == 5678
+        post.restTemplate.requestFactory?.connectTimeout == 1234
+        post.restTemplate.requestFactory?.readTimeout == 5678
     }
 
     def "Test with overridden connect timeout"() {
@@ -100,8 +103,8 @@ class PostTests extends Specification {
 
         then:
         post.url == "http://www.google.com"
-        post.rest.restTemplate.requestFactory?.connectTimeout == 1234
-        post.rest.restTemplate.requestFactory?.readTimeout == 1000
+        post.restTemplate.requestFactory?.connectTimeout == 1234
+        post.restTemplate.requestFactory?.readTimeout == 1000
     }
 
     def "Test with overridden read timeout"() {
@@ -110,7 +113,7 @@ class PostTests extends Specification {
 
         then:
         post.url == "http://www.google.com"
-        post.rest.restTemplate.requestFactory?.connectTimeout == 10000
-        post.rest.restTemplate.requestFactory?.readTimeout == 5678
+        post.restTemplate.requestFactory?.connectTimeout == 10000
+        post.restTemplate.requestFactory?.readTimeout == 5678
     }
 }

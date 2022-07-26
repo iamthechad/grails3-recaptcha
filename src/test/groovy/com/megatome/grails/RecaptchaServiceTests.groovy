@@ -200,6 +200,7 @@ class RecaptchaServiceTests extends Specification implements ServiceUnitTest<Rec
         setup:
         config.recaptcha.publicKey = "ABC"
         config.recaptcha.privateKey = "123"
+        config.recaptcha.enabled = true
 
         expect:
         !service.verifyAnswer([:], "127.0.0.1", [:])
