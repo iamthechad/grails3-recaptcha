@@ -4,31 +4,27 @@ buildscript {
         maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.8.2"
+        classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.3.4"
     }
 }
 
 plugins {
-    id 'net.saliman.cobertura' version '2.3.1'
-    id 'com.github.kt3k.coveralls' version '2.7.1'
-    id 'com.jfrog.artifactory' version '4.4.0'
+    id 'net.saliman.cobertura' version '4.0.0'
+    id 'com.github.kt3k.coveralls' version '2.12.0'
 }
 
-version "3.3.0-SNAPSHOT"
+version "5.0.0-SNAPSHOT"
 group "org.grails.plugins"
 
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: "org.grails.grails-plugin"
-apply plugin: "org.grails.grails-plugin-publish"
+apply plugin: "maven-publish"
 apply plugin: "org.grails.grails-gsp"
 apply plugin: "asset-pipeline"
 
 cobertura.coverageFormats = ['html', 'xml']
-
-def bintrayUser = project.hasProperty('bintray_user') ? project.bintray_user : System.getenv('bintray_user')
-def bintrayKey = project.hasProperty('bintray_key') ? project.bintray_key : System.getenv('bintray_key')
 
 repositories {
     mavenLocal()
@@ -43,88 +39,74 @@ dependencyManagement {
     applyMavenExclusions false
 }
 
-dependencies {
-    //provided 'javax.servlet:javax.servlet-api:3.1.0'
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
 
-    compile "org.grails:grails-datastore-rest-client:6.0.5.RELEASE"
-    compile "org.springframework.boot:spring-boot-starter-logging"
-    compile "org.springframework.boot:spring-boot-autoconfigure"
-    compile "org.grails:grails-core"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
-    compile "org.grails:grails-dependencies"
-    compile "org.grails:grails-web-boot"
-    compile "org.grails.plugins:cache"
-    compile "org.grails.plugins:scaffolding"
+dependencies {
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    compileOnly "io.micronaut:micronaut-inject-groovy"
     console "org.grails:grails-console"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "org.grails:grails-core"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+    implementation "org.grails:grails-web-boot"
+    implementation "org.grails:grails-logging"
+    implementation "org.grails:grails-plugin-rest"
+    implementation "org.grails:grails-plugin-databinding"
+    implementation "org.grails:grails-plugin-i18n"
+    implementation "org.grails:grails-plugin-services"
+    implementation "org.grails:grails-plugin-url-mappings"
+    implementation "org.grails:grails-plugin-interceptors"
     profile "org.grails.profiles:web-plugin"
-    provided "org.grails:grails-plugin-services"
-    provided "org.grails:grails-plugin-domain-class"
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.8.2"
-    testCompile "org.grails:grails-plugin-testing"
-    testCompile "org.grails.plugins:geb"
-    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
-    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+    runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:3.3.4"
+    testImplementation "io.micronaut:micronaut-inject-groovy"
+    testImplementation "org.mockito:mockito-core"
+    testImplementation "org.grails:grails-web-testing-support"
 }
 
 bootRun {
-    jvmArgs('-Dspring.output.ansi.enabled=always')
+    ignoreExitValue true
+    jvmArgs(
+            '-Dspring.output.ansi.enabled=always',
+            '-noverify',
+            '-XX:TieredStopAtLevel=1',
+            '-Xmx1024m')
+    sourceResources sourceSets.main
+    String springProfilesActive = 'spring.profiles.active'
+    systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 
-/*bintray {
-    user = project.hasProperty('bintray_user') ? project.bintray_user : System.getenv('bintray_user')
-    key = project.hasProperty('bintray_key') ? project.bintray_key : System.getenv('bintray_key')
-    publications = ["maven"]
-    publish = true
-    pkg {
-        userOrg = ''
-        repo = "plugins"
-        name = project.name
-        desc = "Grails 3 ReCaptcha plugin"
-        websiteUrl = "https://github.com/iamthechad/grails3-recaptcha"
-        issueTrackerUrl = "https://github.com/iamthechad/grails3-recaptcha/issues"
-        vcsUrl = "https://github.com/iamthechad/grails3-recaptcha.git"
-        licenses = ["Apache-2.0"]
-        labels = ["recaptcha"]
-        publicDownloadNumbers = true
-    }
-}*/
-
-artifactory {
-    contextUrl = 'http://oss.jfrog.org'
-    publish {
-        repository {
-            repoKey = 'oss-snapshot-local'
-            username = bintrayUser
-            password = bintrayKey
-        }
-        defaults {
-            publications('maven')
-        }
+tasks.withType(GroovyCompile) {
+    configure(groovyOptions) {
+        forkOptions.jvmArgs = ['-Xmx1024m']
     }
 }
 
-artifactoryPublish {
-    dependsOn sourcesJar, javadocJar
+tasks.withType(Test) {
+    useJUnitPlatform()
 }
 
 // enable if you wish to package this plugin as a standalone application
-bootRepackage.enabled = false
-grailsPublish {
-    user = bintrayUser
-    key = bintrayKey
-    githubSlug = 'iamthechad/grails3-recaptcha'
-    license {
-        name = 'Apache-2.0'
-    }
-    repo = "plugins"
-    title = "recaptcha"
-    desc = "Grails 3 ReCaptcha plugin"
-    developers = [chadjohnston:"Chad Johnston"]
-    portalUser = project.hasProperty('portal_user') ? project.portal_user : System.getenv('portal_user')
-    portalPassword = project.hasProperty('portal_password') ? project.portal_password : System.getenv('portal_password')
-}
+bootJar.enabled = false
 
 assets {
     packagePlugin = true
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId project.name
+            version project.version
+            groupId project.group
+        }
+    }
 }

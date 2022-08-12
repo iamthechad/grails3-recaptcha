@@ -41,13 +41,13 @@
 
 # Introduction
 
-This plugin is designed to make using the ReCaptcha service within Grails 3 easy. In order to use this plugin, you must have a ReCaptcha account, available from [http://www.google.com/recaptcha](http://www.google.com/recaptcha).
+This plugin is designed to make using the ReCaptcha service within Grails 5 easy. In order to use this plugin, you must have a ReCaptcha account, available from [http://www.google.com/recaptcha](http://www.google.com/recaptcha).
 
 # Installation
 
 Add the following to your `build.gradle`
 
-    compile "org.grails.plugins:recaptcha:3.2.0"
+    compile "org.grails.plugins:recaptcha:5.0.0"
     
 ## Configuration
 Add the following to your application's `application.yml` file:

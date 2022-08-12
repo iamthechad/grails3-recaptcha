@@ -1,7 +1,12 @@
 package com.megatome.grails.recaptcha.net
 
-import grails.plugins.rest.client.RestBuilder
 import org.apache.commons.logging.LogFactory
+import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.http.client.SimpleClientHttpRequestFactory
+import org.springframework.web.client.RestTemplate
+import org.springframework.web.util.UriComponentsBuilder
+
+import java.time.Duration
 
 /**
  * Copyright 2010-2018 Megatome Technologies
@@ -19,31 +24,41 @@ import org.apache.commons.logging.LogFactory
  * limitations under the License.
  */
 
-public class Post {
+class Post {
     private static final log = LogFactory.getLog(this)
     String url
     QueryParams queryParams = new QueryParams(null)
     int connectTimeout = 10000
     int readTimeout = 1000
     AuthenticatorProxy proxy = null
-    RestBuilder rest = null
+    RestTemplateBuilder restTemplateBuilder = null
+    RestTemplate restTemplate = null
 
-    public Post(Map options) {
-        options.each { k,v -> if (this.hasProperty(k) && v) { this."$k" = v} }
-        if (null == rest) {
+    Post(Map options) {
+        options.each { k, v -> if (this.hasProperty(k) && v) { this."$k" = v } }
+        if (!restTemplateBuilder) {
+            restTemplateBuilder = new RestTemplateBuilder()
+        }
+        if (!restTemplate) {
+            SimpleClientHttpRequestFactory requestFactory = (SimpleClientHttpRequestFactory) restTemplateBuilder.requestFactory(SimpleClientHttpRequestFactory).buildRequestFactory()
             if (proxy?.isConfigured()) {
-                rest = new RestBuilder(connectTimeout: connectTimeout, readTimeout: readTimeout, proxy: proxy.proxy)
-            } else {
-                rest = new RestBuilder(connectTimeout: connectTimeout, readTimeout: readTimeout)
+                requestFactory.proxy = proxy.proxy
             }
+            restTemplate = restTemplateBuilder
+                    .requestFactory({ requestFactory })
+                    .setConnectTimeout(Duration.ofMillis(connectTimeout))
+                    .setReadTimeout(Duration.ofMillis(readTimeout))
+                    .build()
         }
     }
 
     def getResponse() {
         try {
-            def queryUrl = url + "?" + queryParams.toRestClientString()
-            def resp = rest.post(queryUrl, queryParams.params)
-            return resp.json
+            def uriBuilder = UriComponentsBuilder.fromHttpUrl(url)
+            queryParams.params.each { name, value ->
+                uriBuilder.queryParam(name as String, value)
+            }
+            return restTemplate.postForObject(uriBuilder.build().encode().toUri(), null, Map)
         } catch (Exception e) {
             def message = "Failed to connect to ${url}."
             if (proxy?.isConfigured()) {

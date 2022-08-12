@@ -16,7 +16,7 @@ package com.megatome.grails.recaptcha.net
  * limitations under the License.
  */
 
-public class QueryParams {
+class QueryParams {
     Map params = [:]
 
     QueryParams(Map params) {
@@ -33,7 +33,7 @@ public class QueryParams {
 
     String toString() {
         def list = []
-        params.each {k, v ->
+        params.each { k, v ->
             list << "$k=$v"
         }
         return list.join("&")
@@ -41,7 +41,7 @@ public class QueryParams {
 
     String toRestClientString() {
         def list = []
-        params.each {k, v ->
+        params.each { k, v ->
             list << "$k={$k}"
         }
         return list.join("&")

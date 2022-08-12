@@ -16,11 +16,10 @@ package com.megatome.grails
  * limitations under the License.
  */
 
-import grails.test.mixin.TestFor
+import grails.testing.web.taglib.TagLibUnitTest
 import spock.lang.Specification
 
-@TestFor(RecaptchaTagLib)
-class RecaptchaTagLibTests extends Specification {
+class RecaptchaTagLibTests extends Specification implements TagLibUnitTest<RecaptchaTagLib> {
     def recapMock = Mock(RecaptchaService.class)
 
     def setup() {
@@ -35,13 +34,13 @@ class RecaptchaTagLibTests extends Specification {
         1 * recapMock.createCaptcha([:])
 
         when:
-        tagLib.recaptcha(theme:"dark", lang:"fr", type:"audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1, includeScript: true)
+        tagLib.recaptcha(theme: "dark", lang: "fr", type: "audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1, includeScript: true)
 
         then:
-        1 * recapMock.createCaptcha([theme:"dark", lang:"fr", type:"audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1, includeScript: true])
+        1 * recapMock.createCaptcha([theme: "dark", lang: "fr", type: "audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1, includeScript: true])
 
         when:
-        tagLib.recaptcha(theme:"dark", foo:"bar")
+        tagLib.recaptcha(theme: "dark", foo: "bar")
 
         then:
         1 * recapMock.createCaptcha([theme: "dark"])
@@ -55,16 +54,16 @@ class RecaptchaTagLibTests extends Specification {
         1 * recapMock.createCaptchaExplicit([:])
 
         when:
-        tagLib.recaptchaExplicit(lang:"fr", loadCallback: "loadCB")
+        tagLib.recaptchaExplicit(lang: "fr", loadCallback: "loadCB")
 
         then:
-        1 * recapMock.createCaptchaExplicit([lang:"fr", loadCallback: "loadCB"])
+        1 * recapMock.createCaptchaExplicit([lang: "fr", loadCallback: "loadCB"])
 
         when:
-        tagLib.recaptchaExplicit(lang:"fr", foo:"bar")
+        tagLib.recaptchaExplicit(lang: "fr", foo: "bar")
 
         then:
-        1 * recapMock.createCaptchaExplicit([lang:"fr"])
+        1 * recapMock.createCaptchaExplicit([lang: "fr"])
     }
 
     void "test renderParameters tag"() {
@@ -75,16 +74,16 @@ class RecaptchaTagLibTests extends Specification {
         1 * recapMock.createRenderParameters([:])
 
         when:
-        tagLib.renderParameters(theme:"dark", type:"audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1)
+        tagLib.renderParameters(theme: "dark", type: "audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1)
 
         then:
-        1 * recapMock.createRenderParameters([theme:"dark", type:"audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1])
+        1 * recapMock.createRenderParameters([theme: "dark", type: "audio", size: "normal", successCallback: "successCB", expiredCallback: "expiredCB", tabindex: 1])
 
         when:
-        tagLib.renderParameters(theme:"dark", lang:"fr", foo:"bar")
+        tagLib.renderParameters(theme: "dark", lang: "fr", foo: "bar")
 
         then:
-        1 * recapMock.createRenderParameters([theme:"dark"])
+        1 * recapMock.createRenderParameters([theme: "dark"])
     }
 
     void "test script tag"() {
@@ -95,16 +94,16 @@ class RecaptchaTagLibTests extends Specification {
         1 * recapMock.createScriptEntry([:])
 
         when:
-        tagLib.script(lang:"fr")
+        tagLib.script(lang: "fr")
 
         then:
-        1 * recapMock.createScriptEntry([lang:"fr"])
+        1 * recapMock.createScriptEntry([lang: "fr"])
 
         when:
-        tagLib.script(lang:"fr", foo:"bar")
+        tagLib.script(lang: "fr", foo: "bar")
 
         then:
-        1 * recapMock.createScriptEntry([lang:"fr"])
+        1 * recapMock.createScriptEntry([lang: "fr"])
     }
 
     void "test ifEnabled tag"() {
