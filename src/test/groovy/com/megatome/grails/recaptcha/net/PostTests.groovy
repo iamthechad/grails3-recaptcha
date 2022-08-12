@@ -29,13 +29,24 @@ class PostTests extends Specification {
     RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder()
 
     def "Test basic POST"(){
-        given:"A rest client instance"
+        given: "A rest client instance"
         def restTemplate = restTemplateBuilder.build()
+        and: "url parameters"
+        def secret = "myprivatekey"
+        def response = "someresponse"
+        def remoteip = "127.0.0.1"
+        and: "a mock server"
         final mockServer = MockRestServiceServer.createServer(restTemplate)
-        mockServer.expect(MockRestRequestMatchers.requestTo("http://www.google.com"))
+        mockServer.expect(MockRestRequestMatchers.requestTo("http://www.google.com?secret=$secret&response=$response&remoteip=$remoteip"))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
                 .andRespond(MockRestResponseCreators.withSuccess('{"success":"true"}', MediaType.APPLICATION_JSON))
+        and: "a post"
         def post = new Post(url: "http://www.google.com", restTemplate: restTemplate)
+        post.queryParams.with {
+            add("secret", secret)
+            add("response", response)
+            add("remoteip", remoteip)
+        }
 
         when:
         def resp = post.response

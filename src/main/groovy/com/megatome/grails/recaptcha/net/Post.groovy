@@ -4,6 +4,7 @@ import org.apache.commons.logging.LogFactory
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.util.UriComponentsBuilder
 
 import java.time.Duration
 
@@ -53,7 +54,11 @@ class Post {
 
     def getResponse() {
         try {
-            return restTemplate.postForObject(url, null, Map, queryParams.params)
+            def uriBuilder = UriComponentsBuilder.fromHttpUrl(url)
+            queryParams.params.each { name, value ->
+                uriBuilder.queryParam(name as String, value)
+            }
+            return restTemplate.postForObject(uriBuilder.build().encode().toUri(), null, Map)
         } catch (Exception e) {
             def message = "Failed to connect to ${url}."
             if (proxy?.isConfigured()) {
